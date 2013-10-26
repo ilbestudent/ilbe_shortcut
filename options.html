@@ -1,0 +1,53 @@
+﻿<html>
+<head>
+    <title>ILBE shortcut 설정</title>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+</head>
+<body>
+    <h1>ILBE shortcut 설정 페이지</h1>
+    <p>엑윽엑윽 이거 만든 사람 존나 힘들게 만들었으니까 잘 써주셈 ㄳㄳ - ingyeo_coder</p>
+    <hr>
+    <h2>단축키 설정</h2>
+    <input id="enabled_yn" type="checkbox" name="shortcut" value="yn" disabled>일베로/민주화 단축키 활성화<br>
+    일베로 :
+    <input id="keybinding_yes" type="text" style="width: 100px;" disabled><br>
+    민주화 :
+    <input id="keybinding_no" type="text" style="width: 100px;" disabled><br>
+    <br>
+    <input id="enabled_scrap" type="checkbox" name="shortcut" value="scrap" disabled>스크랩 단축키 활성화<br>
+    스크랩 :
+    <input id="keybinding_scrap" type="text" style="width: 100px;" disabled><br>
+    <br>
+    <input id="enabled_page" type="checkbox" name="shortcut" value="page" disabled>페이지 이동 활성화<br>
+    이전 페이지 :
+    <input id="keybinding_prevpage" type="text" style="width: 100px;" disabled><br>
+    다음 페이지 :
+    <input id="keybinding_nextpage" type="text" style="width: 100px;" disabled><br>
+    <br />
+    <input id="enabled_reply" type="checkbox" name="shortcut" value="scrap" disabled>댓글창 이동 단축키 활성화<br>
+    댓글창 이동 :
+    <input id="keybinding_reply" type="text" style="width: 100px;" disabled><br>
+    <hr>
+    <p>단축키 설정할 때 ⇧, shift, option, ⌥, alt, ctrl, control, command, and ⌘ 지원된다. 그렇다고 ctrl+w 같은 단축키 대입하는 엑읔엑읔 일게이는 없을꺼라고 믿는다.</p>
+    <p>그런데 ctrl+s 같이 브라우저에서 단축키가 이미 설정되어있는 경우는 안된다. 조심해라.</p>
+    <p>특수키: backspace, tab, clear, enter, return, esc, escape, space, up, down, left, right, home, end, pageup, pagedown, del, delete and f1 through f19.</p>
+    <hr />
+    <h2>노알라 표시 기능</h2>
+    <input id="enabled_noala" type="checkbox" name="noala" value="enabled" disabled>노알라 표시 기능 활성화<br>
+    <input id="noala_count" type="text" name="noala_count" style="width: 50px;" disabled>개의 추천마다 표시(위에꺼 체크했을 때 적용)<br />
+    <input id="noala_maxcount" type="text" name="noala_maxcount" style="width: 50px;" disabled />
+    최대 노알라 표시 개수
+    <hr>
+
+    <h2>잉여 시간 표시 기능</h2>
+    <b><div id="timer_value">(불러오는 중...)</div></b>
+    <font color="blue"><div id="ilbe_active"></div></font>
+    <input id="enabled_timer" type="checkbox" name="noala" value="enabled" disabled>잉여 시간 창 표시하기<br>
+    <input id="reset_timer" type="button" value="잉여 시간 초기화" />
+
+    <hr />
+    <input id="save" type="button" value="설정 저장">
+    <input id="reset" type="button" value="초기화">
+    <script src="options.js" charset="utf-8"></script>
+</body>
+</html>
