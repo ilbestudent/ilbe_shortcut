@@ -26,6 +26,37 @@ function secondsToHms(d) {
 chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalStorage_) {
     myLocalStorage = myLocalStorage_;
 
+    // 저격 기능 추가
+    var popupMenu = document.getElementById("popup_menu_area");
+    popupMenu.addEventListener('DOMSubtreeModified', function(){
+        var items = popupMenu.getElementsByTagName("li");
+        var memberInfoPos = -1;
+        var sniperPos = -1;
+        for (var i = 0; i < items.length; ++i) {
+            if (items[i].innerText === "회원 정보 보기") {
+                memberInfoPos = i;
+            }
+            else if (items[i].innerText === "조준하기(ilberadar)") {
+                sniperPos = i;
+            }
+        }
+        if (sniperPos == -1) {
+            var sniperNode = document.createElement("li");
+            var sniperLink = document.createElement("a");
+            sniperLink.innerText = "조준하기(ilberadar)";
+            // http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberInfo&member_srl=$$$ 
+            console.log(memberInfoPos);
+            var memberInfoHref = items[memberInfoPos].getElementsByTagName("a")[0].href; // 멤버 정보 보는 주소
+            var memberSrl = memberInfoHref.match(/member_srl\=(\d+)/)[1];
+            if (memberSrl !== undefined) {
+                sniperLink.href = "http://ilberadar.com/search.php?mid=" + memberSrl;
+                sniperLink.target = "_blank";
+            }
+            sniperNode.appendChild(sniperLink);
+            popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
+        }
+    });
+
     if (myLocalStorage["enabled_timer"] === 'true') {
         var timeNode = document.createElement("div");
         timeNode.innerText = "잉여시간(누적):" + secondsToHms(parseInt(myLocalStorage["ingyeo_time"]));
