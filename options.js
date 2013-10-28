@@ -1,60 +1,158 @@
-﻿function updateToLocalStorage() {
-    localStorage["enabled_yn"] = enabled_yn;
-    localStorage["enabled_scrap"] = enabled_scrap;
-    localStorage["enabled_page"] = enabled_page;
-    localStorage["enabled_reply"] = enabled_reply;
-    localStorage["enabled_noala"] = enabled_noala;
-    localStorage["enabled_timer"] = enabled_timer;
-    localStorage["noala_count"] = noala_count;
-    localStorage["noala_maxcount"] = noala_maxcount;
-    localStorage["keybinding_yes"] = keybinding_yes;
-    localStorage["keybinding_no"] = keybinding_no;
-    localStorage["keybinding_scrap"] = keybinding_scrap;
-    localStorage["keybinding_reply"] = keybinding_reply;
-    localStorage["keybinding_prevpage"] = keybinding_prevpage;
-    localStorage["keybinding_nextpage"] = keybinding_nextpage;
+﻿function ghost_yn(isDeactivated) {
+  yn.style.color = isDeactivated ? 'graytext' : 'black';
+  yn.keybinding_yes.disabled = isDeactivated;
+  yn.keybinding_no.disabled = isDeactivated;
 }
+
+function ghost_scrap(isDeactivated) {
+  scrap.style.color = isDeactivated ? 'graytext' : 'black';
+  scrap.keybinding_scrap.disabled = isDeactivated;
+}
+
+function ghost_page(isDeactivated) {
+  page.style.color = isDeactivated ? 'graytext' : 'black';
+  page.keybinding_prevpage.disabled = isDeactivated;
+  page.keybinding_nextpage.disabled = isDeactivated;
+}
+
+function ghost_reply(isDeactivated) {
+  reply.style.color = isDeactivated ? 'graytext' : 'black';
+  reply.keybinding_reply.disabled = isDeactivated;
+}
+
+function ghost_noala(isDeactivated) {
+  noala.style.color = isDeactivated ? 'graytext' : 'black';
+  noala.noala_count.disabled = isDeactivated;
+  noala.noala_maxcount.disabled = isDeactivated;
+}
+
+window.addEventListener('load', function() {
+  yn.enable_yn.checked = JSON.parse(localStorage["enabled_yn"]);
+  yn.keybinding_yes.value = localStorage["keybinding_yes"];
+  yn.keybinding_no.value = localStorage["keybinding_no"];
+  scrap.enable_scrap.checked = JSON.parse(localStorage["enabled_scrap"]);
+  scrap.keybinding_scrap.value = localStorage["keybinding_scrap"];
+  page.enable_page.checked = JSON.parse(localStorage["enabled_page"]);
+  page.keybinding_prevpage.value = localStorage["keybinding_prevpage"];
+  page.keybinding_nextpage.value = localStorage["keybinding_nextpage"];
+  reply.enable_reply.checked = JSON.parse(localStorage["enabled_reply"]);
+  reply.keybinding_reply.value = localStorage["keybinding_reply"];
+  noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
+  noala.noala_count.value = localStorage["noala_count"];
+  noala.noala_maxcount.value = localStorage["noala_maxcount"];
+  timer.checked = JSON.parse(localStorage["enabled_timer"]);
+
+  if (!yn.enable_yn.checked) { ghost_yn(true); }
+  if (!scrap.enable_scrap.checked) { ghost_scrap(true); }
+  if (!page.enable_page.checked) { ghost_page(true); }
+  if (!reply.enable_reply.checked) { ghost_reply(true); }
+  if (!noala.enable_noala.checked) { ghost_noala(true); }
+
+  yn.enable_yn.onchange = function() {
+    localStorage["enabled_yn"] = yn.enable_yn.checked;
+    ghost_yn(!yn.enable_yn.checked);
+  };
+
+  scrap.enable_scrap.onchange = function() {
+    localStorage["enabled_scrap"] = scrap.enable_scrap.checked;
+    ghost_scrap(!scrap.enable_scrap.checked);
+  };
+
+  page.enable_page.onchange = function() {
+    localStorage["enabled_page"] = page.enable_page.checked;
+    ghost_page(!page.enable_page.checked);
+  };
+
+  reply.enable_reply.onchange = function() {
+    localStorage["enabled_reply"] = reply.enable_reply.checked;
+    ghost_reply(!reply.enable_reply.checked);
+  };
+
+  noala.enable_noala.onchange = function() {
+    localStorage["enabled_noala"] = noala.enable_noala.checked;
+    ghost_noala(!noala.enable_noala.checked);
+  };
+
+  timer.onchange = function() {
+    localStorage["enabled_timer"] = timer.checked;
+  };
+
+  noala.noala_count.onchange = function() {
+    localStorage["noala_count"] = noala.noala_count.value;
+  };
+
+  noala.noala_maxcount.onchange = function() {
+    localStorage["noala_maxcount"] = noala.noala_maxcount.value;
+  };
+
+  yn.keybinding_yes.onchange = function() {
+    localStorage["keybinding_yes"] = yn.keybinding_yes.value;
+  };
+
+  yn.keybinding_no.onchange = function() {
+    localStorage["keybinding_no"] = yn.keybinding_no.value;
+  };
+
+  scrap.keybinding_scrap.onchange = function() {
+    localStorage["keybinding_scrap"] = scrap.keybinding_scrap.value;
+  };
+
+  reply.keybinding_reply.onchange = function() {
+    localStorage["keybinding_reply"] = reply.keybinding_reply.value;
+  };
+
+  page.keybinding_prevpage.onchange = function() {
+    localStorage["keybinding_prevpage"] = page.keybinding_prevpage.value;
+  };
+
+  page.keybinding_nextpage.onchange = function() {
+    localStorage["keybinding_nextpage"] = page.keybinding_nextpage.value;
+  };
+
+  document.querySelector('#reset').addEventListener('click', resetSettings);
+  document.querySelector('#reset_timer').addEventListener('click', resetTimer);
+
+  updateTimer();
+  setInterval(updateTimer, 5000);
+});
+
+function resetSettings() {
+  yn.enable_yn.checked = true;
+  yn.keybinding_yes.value = "y";
+  yn.keybinding_no.value = "n";
+  scrap.enable_scrap.checked = true;
+  scrap.keybinding_scrap.value = "s";
+  page.enable_page.checked = true;
+  page.keybinding_prevpage.value = "[";
+  page.keybinding_nextpage.value = "]";
+  reply.enable_reply.checked = true;
+  reply.keybinding_reply.value = "r";
+  noala.enable_noala.checked = true;
+  noala.noala_count.value = 200;
+  noala.noala_maxcount.value = 10;
+  timer.checked = false;
+
+  yn.enable_yn.onchange();
+  yn.keybinding_yes.onchange();
+  yn.keybinding_no.onchange();
+  scrap.enable_scrap.onchange();
+  scrap.keybinding_scrap.onchange();
+  page.enable_page.onchange();
+  page.keybinding_prevpage.onchange();
+  page.keybinding_nextpage.onchange();
+  reply.enable_reply.onchange();
+  reply.keybinding_reply.onchange();
+  noala.enable_noala.onchange();
+  noala.noala_count.onchange();
+  noala.noala_maxcount.onchange();
+  timer.onchange();
+}
+
 function resetTimer() {
     localStorage["ingyeo_time"] = 0;
     updateTimer();
 }
-function resetSettings() {
-    enabled_yn = 'true';
-    enabled_scrap = 'true';
-    enabled_page = 'true';
-    enabled_reply = 'true';
-    enabled_noala = 'true';
-    enabled_timer = 'false';
-    noala_count = 200;
-    noala_maxcount = 10;
-    keybinding_yes = "y";
-    keybinding_no = "n";
-    keybinding_scrap = "s";
-    keybinding_reply = "r";
-    keybinding_prevpage = "[";
-    keybinding_nextpage = "]";
-    updateToLocalStorage();
-    loadOptions(); // 다시 읽게 해서 UI에 반영을 하자
-    alert('초기화했음');
-}
-function saveOptions() {
-    enabled_yn = document.querySelector('#enabled_yn').checked;
-    enabled_scrap = document.querySelector('#enabled_scrap').checked;
-    enabled_page = document.querySelector('#enabled_page').checked;
-    enabled_reply = document.querySelector('#enabled_reply').checked;
-    enabled_noala = document.querySelector('#enabled_noala').checked;
-    enabled_timer = document.querySelector('#enabled_timer').checked;
-    noala_count = document.querySelector('#noala_count').value;
-    noala_maxcount = document.querySelector('#noala_maxcount').value;
-    keybinding_yes = document.querySelector('#keybinding_yes').value;
-    keybinding_no = document.querySelector('#keybinding_no').value;
-    keybinding_scrap = document.querySelector('#keybinding_scrap').value;
-    keybinding_reply = document.querySelector('#keybinding_reply').value;
-    keybinding_prevpage = document.querySelector('#keybinding_prevpage').value;
-    keybinding_nextpage = document.querySelector('#keybinding_nextpage').value;
-    updateToLocalStorage();
-    alert('저장 완료');
-}
+
 function updateTimer() {
     if (localStorage["is_ilbe_active"] === 'true') {
         document.querySelector('#ilbe_active').innerText = "(일베 활동 중...)";
@@ -64,102 +162,6 @@ function updateTimer() {
     }
     document.querySelector('#timer_value').innerText = secondsToHms(parseInt(localStorage["ingyeo_time"]));
 };
-function loadOptions() {
-    updateTimer();
-    setInterval(updateTimer, 5000);
-
-    var enabled_yn = localStorage["enabled_yn"];
-    if (enabled_yn === undefined) {
-        enabled_yn = 'true';
-    }
-    var enabled_scrap = localStorage["enabled_scrap"];
-    if (enabled_scrap === undefined) {
-        enabled_scrap = 'true';
-    }
-    var enabled_page = localStorage["enabled_page"];
-    if (enabled_page === undefined) {
-        enabled_page = 'true';
-    }
-    var enabled_reply = localStorage["enabled_reply"];
-    if (enabled_reply === undefined) {
-        enabled_reply = 'true';
-    }
-    var enabled_noala = localStorage["enabled_noala"];
-    if (enabled_noala === undefined) {
-        enabled_noala = 'true';
-    }
-    var enabled_timer = localStorage["enabled_timer"];
-    if (enabled_timer === undefined) {
-        enabled_timer = 'false';
-    }
-    var noala_count = localStorage["noala_count"];
-    if (noala_count === undefined) {
-        noala_count = 200;
-    }
-    var noala_maxcount = localStorage["noala_maxcount"];
-    if (noala_maxcount === undefined) {
-        noala_maxcount = 10;
-    }
-    var keybinding_yes = localStorage["keybinding_yes"];
-    if (keybinding_yes === undefined) {
-        keybinding_yes = "y";
-    }
-    var keybinding_no = localStorage["keybinding_no"];
-    if (keybinding_no === undefined) {
-        keybinding_no = "n";
-    }
-    var keybinding_scrap = localStorage["keybinding_scrap"];
-    if (keybinding_scrap === undefined) {
-        keybinding_scrap = "s";
-    }
-    var keybinding_reply = localStorage["keybinding_reply"];
-    if (keybinding_reply === undefined) {
-        keybinding_reply = "r";
-    }
-    var keybinding_prevpage = localStorage["keybinding_prevpage"];
-    if (keybinding_prevpage === undefined) {
-        keybinding_prevpage = "[";
-    }
-    var keybinding_nextpage = localStorage["keybinding_nextpage"];
-    if (keybinding_nextpage === undefined) {
-        keybinding_nextpage = "]";
-    }
-
-
-    document.querySelector('#enabled_yn').disabled = false;
-    document.querySelector('#enabled_yn').checked = (enabled_yn === 'true');
-    document.querySelector('#enabled_scrap').disabled = false;
-    document.querySelector('#enabled_scrap').checked = (enabled_scrap === 'true');
-    document.querySelector('#enabled_page').disabled = false;
-    document.querySelector('#enabled_page').checked = (enabled_page === 'true');
-    document.querySelector('#enabled_reply').disabled = false;
-    document.querySelector('#enabled_reply').checked = (enabled_reply === 'true');
-    document.querySelector('#enabled_noala').disabled = false;
-    document.querySelector('#enabled_noala').checked = (enabled_noala === 'true');
-    document.querySelector('#enabled_timer').disabled = false;
-    document.querySelector('#enabled_timer').checked = (enabled_timer === 'true');
-    document.querySelector('#noala_count').disabled = false;
-    document.querySelector('#noala_count').value = noala_count;
-    document.querySelector('#noala_maxcount').disabled = false;
-    document.querySelector('#noala_maxcount').value = noala_maxcount;
-    document.querySelector('#keybinding_yes').disabled = false;
-    document.querySelector('#keybinding_yes').value = keybinding_yes;
-    document.querySelector('#keybinding_no').disabled = false;
-    document.querySelector('#keybinding_no').value = keybinding_no;
-    document.querySelector('#keybinding_scrap').disabled = false;
-    document.querySelector('#keybinding_scrap').value = keybinding_scrap;
-    document.querySelector('#keybinding_reply').disabled = false;
-    document.querySelector('#keybinding_reply').value = keybinding_reply;
-    document.querySelector('#keybinding_prevpage').disabled = false;
-    document.querySelector('#keybinding_prevpage').value = keybinding_prevpage;
-    document.querySelector('#keybinding_nextpage').disabled = false;
-    document.querySelector('#keybinding_nextpage').value = keybinding_nextpage;
-}
-
-document.addEventListener('DOMContentLoaded', loadOptions);
-document.querySelector('#reset').addEventListener('click', resetSettings);
-document.querySelector('#save').addEventListener('click', saveOptions);
-document.querySelector('#reset_timer').addEventListener('click', resetTimer);
 
 function secondsToHms(d) {
     d = Number(d);

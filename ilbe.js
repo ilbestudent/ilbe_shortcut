@@ -66,7 +66,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         }
     });
 
-    if (myLocalStorage["enabled_timer"] === 'true') {
+    if (JSON.parse(myLocalStorage["enabled_timer"])) {
         var timeNode = document.createElement("div");
         timeNode.innerText = "잉여시간(누적):" + secondsToHms(parseInt(myLocalStorage["ingyeo_time"]));
         var elapsedTime = myLocalStorage["ingyeo_time"];
@@ -75,7 +75,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         document.body.appendChild(timeNode);
     }
 
-    if (myLocalStorage["enabled_noala"] === 'true') {
+    if (JSON.parse(myLocalStorage["enabled_noala"])) {
         // 노알라 기능
         table_nodes = document.getElementsByTagName("table");
         for (var i = 0; i < table_nodes.length; ++i) {
@@ -108,10 +108,10 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         }
     }
 
-    key(myLocalStorage["keybinding_yes"], function () { if (myLocalStorage["enabled_yn"] === 'true') { document.getElementsByTagName("button").item(0).click(); } });
-    key(myLocalStorage["keybinding_no"], function () { if (myLocalStorage["enabled_yn"] === 'true') { document.getElementsByTagName("button").item(1).click(); } });
+    key(myLocalStorage["keybinding_yes"], function () { if (JSON.parse(myLocalStorage["enabled_yn"])) { document.getElementsByTagName("button").item(0).click(); } });
+    key(myLocalStorage["keybinding_no"], function () { if (JSON.parse(myLocalStorage["enabled_yn"])) { document.getElementsByTagName("button").item(1).click(); } });
     key(myLocalStorage["keybinding_scrap"], function () {
-        if (myLocalStorage["enabled_scrap"] === 'true') {
+        if (JSON.parse(myLocalStorage["enabled_scrap"])) {
             document.getElementsByClassName("document_popup_menu").item(0).children.item(0).click();
 
             var scrap_link_elem = null;
@@ -142,17 +142,17 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         }
     });
     key(myLocalStorage["keybinding_prevpage"], function () {
-        if (myLocalStorage["enabled_page"] === 'true') {
+        if (JSON.parse(myLocalStorage["enabled_page"])) {
             movePage(-1);
         }
     });
     key(myLocalStorage["keybinding_nextpage"], function () {
-        if (myLocalStorage["enabled_page"] === 'true') {
+        if (JSON.parse(myLocalStorage["enabled_page"])) {
             movePage(1);
         }
     });
     key(myLocalStorage["keybinding_reply"], function () {
-        if (myLocalStorage["enabled_reply"] === 'true') {
+        if (JSON.parse(myLocalStorage["enabled_reply"])) {
             document.getElementById("editor_1").focus(function () {
                 document.getElementById("editor_1").select();
             });

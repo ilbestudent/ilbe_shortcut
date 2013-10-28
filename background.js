@@ -1,11 +1,11 @@
 chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
     if (request.method == "getLocalStorage") {
-        if (localStorage["enabled_yn"] === undefined) localStorage["enabled_yn"] = 'true';
-        if (localStorage["enabled_scrap"] === undefined) localStorage["enabled_scrap"] = 'true';
-        if (localStorage["enabled_page"] === undefined) localStorage["enabled_page"] = 'true';
-        if (localStorage["enabled_reply"] === undefined) localStorage["enabled_reply"] = 'true';
-        if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = 'true';
-        if (localStorage["enabled_timer"] === undefined) localStorage["enabled_timer"] = 'false';
+        if (localStorage["enabled_yn"] === undefined) localStorage["enabled_yn"] = true;
+        if (localStorage["enabled_scrap"] === undefined) localStorage["enabled_scrap"] = true;
+        if (localStorage["enabled_page"] === undefined) localStorage["enabled_page"] = true;
+        if (localStorage["enabled_reply"] === undefined) localStorage["enabled_reply"] = true;
+        if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = true;
+        if (localStorage["enabled_timer"] === undefined) localStorage["enabled_timer"] = false;
         if (localStorage["noala_count"] === undefined) localStorage["noala_count"] = '200';
         if (localStorage["noala_maxcount"] === undefined) localStorage["noala_maxcount"] = '10';
         if (localStorage["keybinding_yes"] === undefined) localStorage["keybinding_yes"] = 'y';
