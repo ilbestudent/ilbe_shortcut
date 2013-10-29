@@ -46,23 +46,33 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             if (items[i].innerText === "회원 정보 보기") {
                 memberInfoPos = i;
             }
-            else if (items[i].innerText === "조준하기(ilberadar)") {
+            else if (items[i].innerText === "조준하기(일베레이더)") {
                 sniperPos = i;
             }
         }
         if (sniperPos == -1) {
+			var image = chrome.extension.getURL("snipe.gif")
             var sniperNode = document.createElement("li");
+			sniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var sniperLink = document.createElement("a");
-            sniperLink.innerText = "조준하기(ilberadar)";
+            sniperLink.innerText = "조준하기(일베레이더)";
+            var googlesniperNode = document.createElement("li");
+			googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
+            var googlesniperLink = document.createElement("a");
+            googlesniperLink.innerText = "조준하기(구글)";
             // http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberInfo&member_srl=$$$ 
             var memberInfoHref = items[memberInfoPos].getElementsByTagName("a")[0].href; // 멤버 정보 보는 주소
             var memberSrl = memberInfoHref.match(/member_srl\=(\d+)/)[1];
             if (memberSrl !== undefined) {
                 sniperLink.href = "http://ilberadar.com/search.php?mid=" + memberSrl;
                 sniperLink.target = "_blank";
+                googlesniperLink.href = "http://www.google.co.kr/search?q=site%3Ailbe.com+" + memberSrl;
+                googlesniperLink.target = "_blank";
             }
             sniperNode.appendChild(sniperLink);
+            googlesniperNode.appendChild(googlesniperLink);
             popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
+            popupMenu.getElementsByTagName("ul")[0].appendChild(googlesniperNode);
         }
     });
 
