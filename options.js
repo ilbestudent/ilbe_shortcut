@@ -1,4 +1,22 @@
-﻿function ghost_yn(isDeactivated) {
+﻿// 기본 설정
+var defaultSetting = {
+  enabled_yn:true, // 일베로/민주화 단축키 활성화
+  keybinding_yes:"y", // 일베로 단축키
+  keybinding_no:"n", // 민주화 단축키
+  enabled_scrap:true, // 스크랩 단축키 활성화 
+  keybinding_scrap:"s", // 스크랩 단축키 
+  enabled_page:true, // 페이지 이동 단축키 활성화 
+  keybinding_prevpage:"[", // 이전 페이지 단축키 
+  keybinding_nextpage:"]", // 다음 페이지 단축키 
+  enabled_reply:true, // 댓글창 이동 단축키 활성화 
+  keybinding_reply:"r", // 댓글창 이동 단축키 
+  enabled_noala:true, // 노알라 표시 기능 활성화 
+  noala_count:200, // 일베 n개 당 노알라 1개 표시 
+  noala_maxcount:10, // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
+  enabled_timer:false, // 잉여 시간 표시 기능 
+};
+
+function ghost_yn(isDeactivated) {
   yn.style.color = isDeactivated ? 'graytext' : 'black';
   yn.keybinding_yes.disabled = isDeactivated;
   yn.keybinding_no.disabled = isDeactivated;
@@ -26,7 +44,25 @@ function ghost_noala(isDeactivated) {
   noala.noala_maxcount.disabled = isDeactivated;
 }
 
+function setDefaultIfNull(key,defaultValue){
+  if(localStorage[key]===undefined){
+  	localStorage[key]=defaultValue;
+  	console.log("default value is assigned. key=" + key + ", value=" + defaultValue);
+  }
+}
+
+function setDefaultSettingsIfNecessary(){
+  for (var keyName in defaultSetting){
+    setDefaultIfNull(keyName,defaultSetting[keyName]);
+  }
+}
+
 window.addEventListener('load', function() {
+  setDefaultSettingsIfNecessary(); // localStorage에 아무 내용도 저장되어 있지 않으면 undefined로 리턴되므로 에러 발생.
+  setDefaultIfNull("ingyeo_time",0); // 잉여 시간이 기록되지 않았으면 0으로 초기화
+  if(localStorage["ingyeo_time"]=='NaN'){
+  	localStorage["ingyeo_time"]=0;
+  }
   yn.enable_yn.checked = JSON.parse(localStorage["enabled_yn"]);
   yn.keybinding_yes.value = localStorage["keybinding_yes"];
   yn.keybinding_no.value = localStorage["keybinding_no"];
@@ -117,20 +153,20 @@ window.addEventListener('load', function() {
 });
 
 function resetSettings() {
-  yn.enable_yn.checked = true;
-  yn.keybinding_yes.value = "y";
-  yn.keybinding_no.value = "n";
-  scrap.enable_scrap.checked = true;
-  scrap.keybinding_scrap.value = "s";
-  page.enable_page.checked = true;
-  page.keybinding_prevpage.value = "[";
-  page.keybinding_nextpage.value = "]";
-  reply.enable_reply.checked = true;
-  reply.keybinding_reply.value = "r";
-  noala.enable_noala.checked = true;
-  noala.noala_count.value = 200;
-  noala.noala_maxcount.value = 10;
-  timer.checked = false;
+  yn.enable_yn.checked = defaultSetting.enabled_yn;
+  yn.keybinding_yes.value = defaultSetting.keybinding_yes;
+  yn.keybinding_no.value = defaultSetting.keybinding_no;
+  scrap.enable_scrap.checked = defaultSetting.enabled_scrap;
+  scrap.keybinding_scrap.value = defaultSetting.keybinding_scrap;
+  page.enable_page.checked = defaultSetting.enabled_page;
+  page.keybinding_prevpage.value = defaultSetting.keybinding_prevpage;
+  page.keybinding_nextpage.value = defaultSetting.keybinding_nextpage;
+  reply.enable_reply.checked = defaultSetting.enabled_reply;
+  reply.keybinding_reply.value = defaultSetting.keybinding_reply;
+  noala.enable_noala.checked = defaultSetting.enabled_noala;
+  noala.noala_count.value = defaultSetting.noala_count;
+  noala.noala_maxcount.value = defaultSetting.noala_maxcount;
+  timer.checked = defaultSetting.enabled_timer;
 
   yn.enable_yn.onchange();
   yn.keybinding_yes.onchange();
@@ -154,7 +190,7 @@ function resetTimer() {
 }
 
 function updateTimer() {
-    if (localStorage["is_ilbe_active"] === 'true') {
+    if (JSON.parse(localStorage["is_ilbe_active"]) === true) {
         document.querySelector('#ilbe_active').innerText = "(일베 활동 중...)";
     }
     else {

@@ -1,8 +1,8 @@
 ﻿{
   "name": "ILBE shortcut",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "manifest_version": 2,
-  "description": "일베 전용 단축키 및 노알라 표시 기능",
+  "description": "일베 전용 단축키, 노알라 표시 기능, 잉여 시간 타이머",
   "options_page" : "options.html",
   "icons" : {
     "48" : "icon-48.png",
