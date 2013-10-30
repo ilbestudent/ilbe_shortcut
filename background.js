@@ -22,6 +22,12 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
     }
 });
 
+chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if (request.action == "openLink")
+        chrome.tabs.create({url:request.link});
+});
+
 // 일베 잉여 사용시간 계산
 setInterval(function () {
     chrome.tabs.getAllInWindow(null, function (tabs) {

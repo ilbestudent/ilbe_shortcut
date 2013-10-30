@@ -36,6 +36,16 @@ function secondsToHms(d) {
 chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalStorage_) {
     myLocalStorage = myLocalStorage_;
 
+    var link = document.evaluate("//a[contains(@href, 'todayhumor.co.kr')]", document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    for (var i = 0; i < link.snapshotLength; i++) {
+        var thisLink = link.snapshotItem(i);
+        thisLink.setAttribute("class", thisLink.href);
+        thisLink.addEventListener('click', function(){
+            chrome.runtime.sendMessage({action: "openLink", link: thisLink.className});
+        });
+        thisLink.href = "javascript:void(0)";
+    }
+
     // 저격 기능 추가
     var popupMenu = document.getElementById("popup_menu_area");
     popupMenu.addEventListener('DOMSubtreeModified', function(){
