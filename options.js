@@ -63,8 +63,7 @@ function ghost_not2(isDeactivated) {
 
 function setDefaultIfNull(key,defaultValue){
   if(localStorage[key]===undefined){
-  	localStorage[key]=defaultValue;
-  	console.log("default value is assigned. key=" + key + ", value=" + defaultValue);
+    localStorage[key]=defaultValue;
   }
 }
 

@@ -9,19 +9,19 @@ function movePage(relPos) {
     pageNavigation = pageNavigation[pageNavigation.length - 1]; // select the last one
     var currentPage = parseInt(pageNavigation.getElementsByTagName("strong")[0].innerText);
     var pageLinks = pageNavigation.getElementsByTagName("a");
-	var t = -1;
-	for(var i=0;i<pageLinks.length;++i){
-		if ( pageLinks[i].innerText === '이전' ){ // 첫 페이지 링크 따라가지 않도록 함
-			t = i;
-			break;
-		}
-	}
-	if(t!=-1){
-		var newPage = currentPage + relPos;
-		newPage = Math.max(1, newPage);
-		var newHref = pageLinks[t].href.replace(/page=\d+/, "page=" + newPage);
-		location.href = newHref;
-	}
+    var t = -1;
+    for(var i=0;i<pageLinks.length;++i){
+        if ( pageLinks[i].innerText === '이전' ){ // 첫 페이지 링크 따라가지 않도록 함
+            t = i;
+            break;
+        }
+    }
+    if(t!=-1){
+        var newPage = currentPage + relPos;
+        newPage = Math.max(1, newPage);
+        var newHref = pageLinks[t].href.replace(/page=\d+/, "page=" + newPage);
+        location.href = newHref;
+    }
 }
 
 function secondsToHms(d) {
@@ -61,13 +61,13 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             }
         }
         if (sniperPos == -1) {
-			var image = chrome.extension.getURL("snipe.gif")
+            var image = chrome.extension.getURL("snipe.gif")
             var sniperNode = document.createElement("li");
-			sniperNode.setAttribute("style", "background-image:url('" + image + "')");
+            sniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var sniperLink = document.createElement("a");
             sniperLink.innerText = "조준하기(일베레이더)";
             var googlesniperNode = document.createElement("li");
-			googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
+            googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var googlesniperLink = document.createElement("a");
             googlesniperLink.innerText = "조준하기(구글)";
             // http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberInfo&member_srl=$$$ 

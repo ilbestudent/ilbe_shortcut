@@ -33,10 +33,10 @@ function refreshUsage() {
                 not2++;
             }
         } else {
-			if (time > 0) {
+            if (time > 0) {
                 localStorage["time"] = +new Date() - time + parseInt(localStorage["time"]);
                 localStorage["count"] = count + parseInt(localStorage["count"]);
-			}
+            }
             time = -1;
             count = 0;
             not = 1;
@@ -66,7 +66,6 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["enabled_page"] === undefined) localStorage["enabled_page"] = true;
         if (localStorage["enabled_reply"] === undefined) localStorage["enabled_reply"] = true;
         if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = true;
-        if (localStorage["enabled_timer"] === undefined) localStorage["enabled_timer"] = false;
         if (localStorage["enabled_not"] === undefined) localStorage["enabled_not"] = false;
         if (localStorage["enabled_not2"] === undefined) localStorage["enabled_not2"] = false;
         if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
