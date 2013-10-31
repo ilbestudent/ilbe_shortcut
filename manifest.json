@@ -18,11 +18,18 @@
   "background":{
 	"scripts": ["background.js"]
   },
+  "page_action" :
+  {
+    "default_icon" : "icon-16.png",
+    "default_title" : "ILBE shortcut",
+    "default_popup" : "popup.html"
+  },
   "permissions": [
     "http://www.ilbe.com/",
 	"storage",
 	"tabs",
-	"background"
+	"background",
+	"notifications"
   ],
   "web_accessible_resources": [
 	"noala.png",

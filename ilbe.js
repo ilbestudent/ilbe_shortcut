@@ -86,15 +86,6 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         }
     });
 
-    if (JSON.parse(myLocalStorage["enabled_timer"])) {
-        var timeNode = document.createElement("div");
-        timeNode.innerText = "잉여시간(누적):" + secondsToHms(parseInt(myLocalStorage["ingyeo_time"]));
-        var elapsedTime = myLocalStorage["ingyeo_time"];
-        setInterval(function () { elapsedTime++; timeNode.innerText = "잉여시간(누적):" + secondsToHms(elapsedTime); }, 1000);
-        timeNode.style.cssText = "left:0;top:0;position:fixed;z-index=9000;color:#0000ff;";
-        document.body.appendChild(timeNode);
-    }
-
     if (JSON.parse(myLocalStorage["enabled_noala"])) {
         // 노알라 기능
         table_nodes = document.getElementsByTagName("table");

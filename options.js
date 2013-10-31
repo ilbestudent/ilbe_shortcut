@@ -13,7 +13,12 @@ var defaultSetting = {
   enabled_noala:true, // 노알라 표시 기능 활성화 
   noala_count:200, // 일베 n개 당 노알라 1개 표시 
   noala_maxcount:10, // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
-  enabled_timer:false, // 잉여 시간 표시 기능 
+  enabled_not:false,
+  enabled_not2:false,
+  not_freq:60,
+  not2_freq:100,
+  not_msg:'일베 이용 시간이 [시간]을 경과했습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.',
+  not2_msg:'일베 탐색 횟수가 [횟수]번을 초과하였습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.'
 };
 
 function ghost_yn(isDeactivated) {
@@ -44,6 +49,18 @@ function ghost_noala(isDeactivated) {
   noala.noala_maxcount.disabled = isDeactivated;
 }
 
+function ghost_not(isDeactivated) {
+  not.style.color = isDeactivated ? 'graytext' : 'black';
+  not.not_freq.disabled = isDeactivated;
+  not.not_msg.disabled = isDeactivated;
+}
+
+function ghost_not2(isDeactivated) {
+  not2.style.color = isDeactivated ? 'graytext' : 'black';
+  not2.not2_freq.disabled = isDeactivated;
+  not2.not2_msg.disabled = isDeactivated;
+}
+
 function setDefaultIfNull(key,defaultValue){
   if(localStorage[key]===undefined){
   	localStorage[key]=defaultValue;
@@ -59,10 +76,6 @@ function setDefaultSettingsIfNecessary(){
 
 window.addEventListener('load', function() {
   setDefaultSettingsIfNecessary(); // localStorage에 아무 내용도 저장되어 있지 않으면 undefined로 리턴되므로 에러 발생.
-  setDefaultIfNull("ingyeo_time",0); // 잉여 시간이 기록되지 않았으면 0으로 초기화
-  if(localStorage["ingyeo_time"]=='NaN'){
-  	localStorage["ingyeo_time"]=0;
-  }
   yn.enable_yn.checked = JSON.parse(localStorage["enabled_yn"]);
   yn.keybinding_yes.value = localStorage["keybinding_yes"];
   yn.keybinding_no.value = localStorage["keybinding_no"];
@@ -76,13 +89,20 @@ window.addEventListener('load', function() {
   noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
   noala.noala_count.value = localStorage["noala_count"];
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
-  timer.checked = JSON.parse(localStorage["enabled_timer"]);
+  not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
+  not.not_freq.value = localStorage["not_freq"];
+  not.not_msg.value = localStorage["not_msg"];
+  not2.enable_not2.checked = JSON.parse(localStorage["enabled_not2"]);
+  not2.not2_freq.value = localStorage["not2_freq"];
+  not2.not2_msg.value = localStorage["not2_msg"];
 
   if (!yn.enable_yn.checked) { ghost_yn(true); }
   if (!scrap.enable_scrap.checked) { ghost_scrap(true); }
   if (!page.enable_page.checked) { ghost_page(true); }
   if (!reply.enable_reply.checked) { ghost_reply(true); }
   if (!noala.enable_noala.checked) { ghost_noala(true); }
+  if (!not.enable_not.checked) { ghost_not(true); }
+  if (!not2.enable_not2.checked) { ghost_not2(true); }
 
   yn.enable_yn.onchange = function() {
     localStorage["enabled_yn"] = yn.enable_yn.checked;
@@ -107,10 +127,6 @@ window.addEventListener('load', function() {
   noala.enable_noala.onchange = function() {
     localStorage["enabled_noala"] = noala.enable_noala.checked;
     ghost_noala(!noala.enable_noala.checked);
-  };
-
-  timer.onchange = function() {
-    localStorage["enabled_timer"] = timer.checked;
   };
 
   noala.noala_count.onchange = function() {
@@ -145,11 +161,34 @@ window.addEventListener('load', function() {
     localStorage["keybinding_nextpage"] = page.keybinding_nextpage.value;
   };
 
-  document.querySelector('#reset').addEventListener('click', resetSettings);
-  document.querySelector('#reset_timer').addEventListener('click', resetTimer);
+  not.enable_not.onchange = function() {
+    localStorage["enabled_not"] = not.enable_not.checked;
+    ghost_not(!not.enable_not.checked);
+  };
 
-  updateTimer();
-  setInterval(updateTimer, 5000);
+  not.not_freq.onchange = function() {
+    localStorage["not_freq"] = not.not_freq.value;
+  };
+
+  not.not_msg.onchange = function() {
+    localStorage["not_msg"] = not.not_msg.value;
+  };
+
+  not2.enable_not2.onchange = function() {
+    localStorage["enabled_not2"] = not2.enable_not2.checked;
+    ghost_not2(!not2.enable_not2.checked);
+  };
+
+  not2.not2_freq.onchange = function() {
+    localStorage["not2_freq"] = not2.not2_freq.value;
+  };
+
+  not2.not2_msg.onchange = function() {
+    localStorage["not2_msg"] = not2.not2_msg.value;
+  };
+
+  document.querySelector('#reset').addEventListener('click', resetSettings);
+
 });
 
 function resetSettings() {
@@ -166,7 +205,12 @@ function resetSettings() {
   noala.enable_noala.checked = defaultSetting.enabled_noala;
   noala.noala_count.value = defaultSetting.noala_count;
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
-  timer.checked = defaultSetting.enabled_timer;
+  not.enable_not = defaultSetting.enabled_not;
+  not.not_freq = defaultSetting.not_freq;
+  not.not_msg = defaultSetting.not_msg;
+  not2.enable_not2 = defaultSetting.enabled_not2;
+  not2.not2_freq = defaultSetting.not2_freq;
+  not2.not2_msg = defaultSetting.not2_msg;
 
   yn.enable_yn.onchange();
   yn.keybinding_yes.onchange();
@@ -181,28 +225,10 @@ function resetSettings() {
   noala.enable_noala.onchange();
   noala.noala_count.onchange();
   noala.noala_maxcount.onchange();
-  timer.onchange();
-}
-
-function resetTimer() {
-    localStorage["ingyeo_time"] = 0;
-    updateTimer();
-}
-
-function updateTimer() {
-    if (JSON.parse(localStorage["is_ilbe_active"]) === true) {
-        document.querySelector('#ilbe_active').innerText = "(일베 활동 중...)";
-    }
-    else {
-        document.querySelector('#ilbe_active').innerText = "";
-    }
-    document.querySelector('#timer_value').innerText = secondsToHms(parseInt(localStorage["ingyeo_time"]));
-};
-
-function secondsToHms(d) {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
-    return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
+  not.enable_not.onchange();
+  not.not_freq.onchange();
+  not.not_msg.onchange();
+  not2.enable_not2.onchange();
+  not2.not2_freq.onchange();
+  not2.not2_msg.onchange();
 }

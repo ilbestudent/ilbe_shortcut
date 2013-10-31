@@ -40,11 +40,18 @@
       <input type="text" id="noala_count" class="number"><label for="noala_count">베마다 표시</label><br>
       <label for="noala_maxcount">최대 노알라 표시 개수 : </label><input type="text" id="noala_maxcount" class="number">
     </form>
-    <h2>잉여 시간 표시 기능</h2>
-    <b><div id="timer_value">(불러오는 중...)</div></b>
-    <font color="blue"><div id="ilbe_active"></div></font>
-    <input type="checkbox" id="timer"><label for="timer"> 잉여 시간 창 표시하기</label><br>
-    <input id="reset_timer" type="button" value="잉여 시간 초기화" />
-	<h2><input id="reset" type="button" value="설정 초기화"></h2>
+    <h2>이용 시간 알림</h2>
+    <form id="not">
+      <input type="checkbox" id="enable_not">
+	  <input type="text" id="not_freq" class="number"><label for="not_freq">분 마다 알림 표시</label><br>
+	  <label for="not_msg">알림 메시지 : </label><input type="text" id="not_msg">
+    </form>
+    <h2>탐색 횟수 알림</h2>
+    <form id="not2">
+      <input type="checkbox" id="enable_not2">
+      <input type="text" id="not2_freq" class="number"><label for="not2_freq">번 마다 알림 표시</label><br>
+      <label for="not2_msg">알림 메시지 : </label><input type="text" id="not2_msg">
+    </form>
+    <h2><input id="reset" type="button" value="설정 초기화"></h2>
   </body>
 </html>
