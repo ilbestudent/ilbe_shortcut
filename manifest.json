@@ -5,26 +5,34 @@
   "description": "일베 전용 단축키, 노알라 표시 기능, 잉여 시간 타이머",
   "options_page" : "options.html",
   "icons" : {
-    "48" : "icon-48.png",
-    "128" : "icon-128.png"
+        "48" : "icon-48.png",
+        "128" : "icon-128.png"
   },
   "content_scripts":
   [
-	{
-	"matches":["http://www.ilbe.com/*"],
-	"js": ["ilbe.js"]
-	}
+        {
+        "matches":["http://www.ilbe.com/*"],
+        "js": ["ilbe.js"]
+        }
   ],
   "background":{
-	"scripts": ["background.js"]
+        "scripts": ["background.js"]
+  },
+  "page_action" :
+  {
+        "default_icon" : "icon-16.png",
+        "default_title" : "ILBE shortcut",
+        "default_popup" : "popup.html"
   },
   "permissions": [
-    "http://www.ilbe.com/",
-	"storage",
-	"tabs",
-	"background"
+        "http://www.ilbe.com/",
+        "storage",
+        "tabs",
+        "background",
+        "notifications"
   ],
   "web_accessible_resources": [
-	"noala.png"
+        "noala.png",
+        "snipe.gif"
   ]
 }

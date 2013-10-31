@@ -8,11 +8,11 @@
   <body>
     <h1>
       <img src="icon-48.png">
-	  ILBE shortcut
-	</h1>
-	<li>플러그인 공식 홈페이지 : <a href="https://sites.google.com/site/ilbeshortcut/" target="_blank">(여기)</a></li>
-	<li>github 페이지 : <a href="https://github.com/ilbestudent/ilbe_shortcut" target="_blank">여기</a></p></li>
-	<h2>단축키 설정</h2>
+      ILBE shortcut
+    </h1>
+    <li>플러그인 공식 홈페이지 : <a href="https://sites.google.com/site/ilbeshortcut/" target="_blank">https://sites.google.com/site/ilbeshortcut/</a></li>
+    <li>Github 페이지 : <a href="https://github.com/ilbestudent/ilbe_shortcut" target="_blank">https://github.com/ilbestudent/ilbe_shortcut</a></p></li>
+    <h2>단축키 설정</h2>
     <form id="yn">
       <input type="checkbox" id="enable_yn"><label for="enable_yn"> 일베로/민주화 단축키 활성화</label><br>
       <label for="keybinding_yes">일베로 : </label><input type="text" id="keybinding_yes"><br>
@@ -31,7 +31,7 @@
       <input type="checkbox" id="enable_reply"><label for="enable_reply"> 댓글창 이동 단축키 활성화</label><br>
       <label for="keybinding_reply">댓글창 이동 : </label><input type="text" id="keybinding_reply"><br>
     </form>
-    <p>단축키 설정할 때 ⇧, shift, option, ⌥, alt, ctrl, control, command, ⌘ 지원된다. 그렇다고 ctrl+w 같은 단축키 대입하는 엑읔엑읔 일게이는 없을꺼라고 믿는다.</p>
+    <p>단축키 설정할 때 ⇧, shift, option, ⌥, alt, ctrl, control, command, ⌘ 지원된다. 그렇다고 ctrl+w 같은 단축키 대입하는 엑윽엑엑 일게이는 없을꺼라고 믿는다.</p>
     <p>그런데 ctrl+s 같이 브라우저에서 단축키가 이미 설정되어있는 경우는 안된다. 조심해라.</p>
     <p>특수키: backspace, tab, clear, enter, return, esc, escape, space, up, down, left, right, home, end, pageup, pagedown, del, delete, f1~f19.</p>
     <h2>노알라 표시 기능</h2>
@@ -40,11 +40,18 @@
       <input type="text" id="noala_count" class="number"><label for="noala_count">베마다 표시</label><br>
       <label for="noala_maxcount">최대 노알라 표시 개수 : </label><input type="text" id="noala_maxcount" class="number">
     </form>
-    <h2>잉여 시간 표시 기능</h2>
-    <b><div id="timer_value">(불러오는 중...)</div></b>
-    <font color="blue"><div id="ilbe_active"></div></font>
-    <input type="checkbox" id="timer"><label for="timer"> 잉여 시간 창 표시하기</label><br>
-    <input id="reset_timer" type="button" value="잉여 시간 초기화" />
-	<h2><input id="reset" type="button" value="설정 초기화"></h2>
+    <h2>이용 시간 알림</h2>
+    <form id="not">
+      <input type="checkbox" id="enable_not">
+      <input type="text" id="not_freq" class="number"><label for="not_freq">분 마다 알림 표시</label><br>
+      <label for="not_msg">알림 메시지 : </label><input type="text" id="not_msg">
+    </form>
+    <h2>탐색 횟수 알림</h2>
+    <form id="not2">
+      <input type="checkbox" id="enable_not2">
+      <input type="text" id="not2_freq" class="number"><label for="not2_freq">번 마다 알림 표시</label><br>
+      <label for="not2_msg">알림 메시지 : </label><input type="text" id="not2_msg">
+    </form>
+    <h2><input id="reset" type="button" value="설정 초기화"></h2>
   </body>
 </html>

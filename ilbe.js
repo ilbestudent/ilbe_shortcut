@@ -9,19 +9,19 @@ function movePage(relPos) {
     pageNavigation = pageNavigation[pageNavigation.length - 1]; // select the last one
     var currentPage = parseInt(pageNavigation.getElementsByTagName("strong")[0].innerText);
     var pageLinks = pageNavigation.getElementsByTagName("a");
-	var t = -1;
-	for(var i=0;i<pageLinks.length;++i){
-		if ( pageLinks[i].innerText === '이전' ){ // 첫 페이지 링크 따라가지 않도록 함
-			t = i;
-			break;
-		}
-	}
-	if(t!=-1){
-		var newPage = currentPage + relPos;
-		newPage = Math.max(1, newPage);
-		var newHref = pageLinks[t].href.replace(/page=\d+/, "page=" + newPage);
-		location.href = newHref;
-	}
+    var t = -1;
+    for(var i=0;i<pageLinks.length;++i){
+        if ( pageLinks[i].innerText === '이전' ){ // 첫 페이지 링크 따라가지 않도록 함
+            t = i;
+            break;
+        }
+    }
+    if(t!=-1){
+        var newPage = currentPage + relPos;
+        newPage = Math.max(1, newPage);
+        var newHref = pageLinks[t].href.replace(/page=\d+/, "page=" + newPage);
+        location.href = newHref;
+    }
 }
 
 function secondsToHms(d) {
@@ -36,6 +36,16 @@ function secondsToHms(d) {
 chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalStorage_) {
     myLocalStorage = myLocalStorage_;
 
+    var link = document.evaluate("//a[contains(@href, 'todayhumor.co.kr')]", document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    for (var i = 0; i < link.snapshotLength; i++) {
+        var thisLink = link.snapshotItem(i);
+        thisLink.setAttribute("class", thisLink.href);
+        thisLink.addEventListener('click', function(){
+            chrome.runtime.sendMessage({action: "openLink", link: thisLink.className});
+        });
+        thisLink.href = "javascript:void(0)";
+    }
+
     // 저격 기능 추가
     var popupMenu = document.getElementById("popup_menu_area");
     popupMenu.addEventListener('DOMSubtreeModified', function(){
@@ -46,34 +56,35 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             if (items[i].innerText === "회원 정보 보기") {
                 memberInfoPos = i;
             }
-            else if (items[i].innerText === "조준하기(ilberadar)") {
+            else if (items[i].innerText === "조준하기(일베레이더)") {
                 sniperPos = i;
             }
         }
         if (sniperPos == -1) {
+            var image = chrome.extension.getURL("snipe.gif")
             var sniperNode = document.createElement("li");
+            sniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var sniperLink = document.createElement("a");
-            sniperLink.innerText = "조준하기(ilberadar)";
+            sniperLink.innerText = "조준하기(일베레이더)";
+            var googlesniperNode = document.createElement("li");
+            googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
+            var googlesniperLink = document.createElement("a");
+            googlesniperLink.innerText = "조준하기(구글)";
             // http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberInfo&member_srl=$$$ 
             var memberInfoHref = items[memberInfoPos].getElementsByTagName("a")[0].href; // 멤버 정보 보는 주소
             var memberSrl = memberInfoHref.match(/member_srl\=(\d+)/)[1];
             if (memberSrl !== undefined) {
                 sniperLink.href = "http://ilberadar.com/search.php?mid=" + memberSrl;
                 sniperLink.target = "_blank";
+                googlesniperLink.href = "http://www.google.co.kr/search?q=site%3Ailbe.com+" + memberSrl;
+                googlesniperLink.target = "_blank";
             }
             sniperNode.appendChild(sniperLink);
+            googlesniperNode.appendChild(googlesniperLink);
             popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
+            popupMenu.getElementsByTagName("ul")[0].appendChild(googlesniperNode);
         }
     });
-
-    if (JSON.parse(myLocalStorage["enabled_timer"])) {
-        var timeNode = document.createElement("div");
-        timeNode.innerText = "잉여시간(누적):" + secondsToHms(parseInt(myLocalStorage["ingyeo_time"]));
-        var elapsedTime = myLocalStorage["ingyeo_time"];
-        setInterval(function () { elapsedTime++; timeNode.innerText = "잉여시간(누적):" + secondsToHms(elapsedTime); }, 1000);
-        timeNode.style.cssText = "left:0;top:0;position:fixed;z-index=9000;color:#0000ff;";
-        document.body.appendChild(timeNode);
-    }
 
     if (JSON.parse(myLocalStorage["enabled_noala"])) {
         // 노알라 기능
