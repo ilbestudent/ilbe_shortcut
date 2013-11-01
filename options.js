@@ -11,7 +11,7 @@ var defaultSetting = {
   enabled_reply:true, // 댓글창 이동 단축키 활성화 
   keybinding_reply:"r", // 댓글창 이동 단축키 
   enabled_newest:true,
-  keybinding_newest:"alt+1",
+  keybinding_newest:"z",
   enabled_noala:true, // 노알라 표시 기능 활성화 
   noala_count:200, // 일베 n개 당 노알라 1개 표시 
   noala_maxcount:10, // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
