@@ -24,3 +24,7 @@ input[type=text] {
 .number {
   width: 50px !important;
 }
+
+.message {
+  width: 500px !important;
+}

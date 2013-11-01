@@ -1,4 +1,4 @@
-﻿var time = -1;
+var time = -1;
 var count = 0;
 var not = 1;
 var not2 = 1;

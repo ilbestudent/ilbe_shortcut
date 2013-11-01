@@ -1,4 +1,4 @@
-﻿// 기본 설정
+// 기본 설정
 var defaultSetting = {
   enabled_yn:true, // 일베로/민주화 단축키 활성화
   keybinding_yes:"y", // 일베로 단축키

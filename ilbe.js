@@ -1,4 +1,4 @@
-﻿// 엨읔엨읔 키보드 shortcut 기능 업데이트 위해 넣었음
+// 엨읔엨읔 키보드 shortcut 기능 업데이트 위해 넣었음
 //     keymaster.js
 //     (c) 2011-2012 Thomas Fuchs
 //     keymaster.js may be freely distributed under the MIT license.
