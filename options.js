@@ -1,4 +1,4 @@
-﻿// 기본 설정
+// 기본 설정
 var defaultSetting = {
   enabled_yn:true, // 일베로/민주화 단축키 활성화
   keybinding_yes:"y", // 일베로 단축키
@@ -10,9 +10,13 @@ var defaultSetting = {
   keybinding_nextpage:"]", // 다음 페이지 단축키 
   enabled_reply:true, // 댓글창 이동 단축키 활성화 
   keybinding_reply:"r", // 댓글창 이동 단축키 
+  enabled_newest:true,
+  keybinding_newest:"z",
   enabled_noala:true, // 노알라 표시 기능 활성화 
   noala_count:200, // 일베 n개 당 노알라 1개 표시 
   noala_maxcount:10, // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
+  enabled_zero:true,
+  watchlist:"",
   enabled_not:false,
   enabled_not2:false,
   not_freq:60,
@@ -41,6 +45,11 @@ function ghost_page(isDeactivated) {
 function ghost_reply(isDeactivated) {
   reply.style.color = isDeactivated ? 'graytext' : 'black';
   reply.keybinding_reply.disabled = isDeactivated;
+}
+
+function ghost_newest(isDeactivated) {
+  newest.style.color = isDeactivated ? 'graytext' : 'black';
+  newest.keybinding_newest.disabled = isDeactivated;
 }
 
 function ghost_noala(isDeactivated) {
@@ -85,9 +94,13 @@ window.addEventListener('load', function() {
   page.keybinding_nextpage.value = localStorage["keybinding_nextpage"];
   reply.enable_reply.checked = JSON.parse(localStorage["enabled_reply"]);
   reply.keybinding_reply.value = localStorage["keybinding_reply"];
+  newest.enable_newest.checked = JSON.parse(localStorage["enabled_newest"]);
+  newest.keybinding_newest.value = localStorage["keybinding_newest"];
   noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
   noala.noala_count.value = localStorage["noala_count"];
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
+  warning.enable_zero.checked = JSON.parse(localStorage["enabled_zero"]);
+  warning.watchlist.value = localStorage["watchlist"];
   not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
   not.not_freq.value = localStorage["not_freq"];
   not.not_msg.value = localStorage["not_msg"];
@@ -99,6 +112,7 @@ window.addEventListener('load', function() {
   if (!scrap.enable_scrap.checked) { ghost_scrap(true); }
   if (!page.enable_page.checked) { ghost_page(true); }
   if (!reply.enable_reply.checked) { ghost_reply(true); }
+  if (!newest.enable_newest.checked) { ghost_newest(true); }
   if (!noala.enable_noala.checked) { ghost_noala(true); }
   if (!not.enable_not.checked) { ghost_not(true); }
   if (!not2.enable_not2.checked) { ghost_not2(true); }
@@ -121,6 +135,11 @@ window.addEventListener('load', function() {
   reply.enable_reply.onchange = function() {
     localStorage["enabled_reply"] = reply.enable_reply.checked;
     ghost_reply(!reply.enable_reply.checked);
+  };
+
+  newest.enable_newest.onchange = function() {
+    localStorage["enabled_newest"] = newest.enable_newest.checked;
+    ghost_newest(!newest.enable_newest.checked);
   };
 
   noala.enable_noala.onchange = function() {
@@ -152,12 +171,24 @@ window.addEventListener('load', function() {
     localStorage["keybinding_reply"] = reply.keybinding_reply.value;
   };
 
+  newest.keybinding_newest.onchange = function() {
+    localStorage["keybinding_newest"] = newest.keybinding_newest.value;
+  };
+
   page.keybinding_prevpage.onchange = function() {
     localStorage["keybinding_prevpage"] = page.keybinding_prevpage.value;
   };
 
   page.keybinding_nextpage.onchange = function() {
     localStorage["keybinding_nextpage"] = page.keybinding_nextpage.value;
+  };
+
+  warning.enable_zero.onchange = function() {
+    localStorage["enabled_zero"] = warning.enable_zero.checked;
+  };
+
+  warning.watchlist.onchange = function() {
+    localStorage["watchlist"] = warning.watchlist.value;
   };
 
   not.enable_not.onchange = function() {
@@ -201,15 +232,19 @@ function resetSettings() {
   page.keybinding_nextpage.value = defaultSetting.keybinding_nextpage;
   reply.enable_reply.checked = defaultSetting.enabled_reply;
   reply.keybinding_reply.value = defaultSetting.keybinding_reply;
+  newest.enable_newest.checked = defaultSetting.enabled_newest;
+  newest.keybinding_newest.value = defaultSetting.keybinding_newest;
   noala.enable_noala.checked = defaultSetting.enabled_noala;
   noala.noala_count.value = defaultSetting.noala_count;
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
-  not.enable_not = defaultSetting.enabled_not;
-  not.not_freq = defaultSetting.not_freq;
-  not.not_msg = defaultSetting.not_msg;
-  not2.enable_not2 = defaultSetting.enabled_not2;
-  not2.not2_freq = defaultSetting.not2_freq;
-  not2.not2_msg = defaultSetting.not2_msg;
+  warning.enable_zero.checked = defaultSetting.enabled_zero;
+  warning.watchlist.value = defaultSetting.watchlist;
+  not.enable_not.checked = defaultSetting.enabled_not;
+  not.not_freq.value = defaultSetting.not_freq;
+  not.not_msg.value = defaultSetting.not_msg;
+  not2.enable_not2.checked = defaultSetting.enabled_not2;
+  not2.not2_freq.value = defaultSetting.not2_freq;
+  not2.not2_msg.value = defaultSetting.not2_msg;
 
   yn.enable_yn.onchange();
   yn.keybinding_yes.onchange();
@@ -221,9 +256,13 @@ function resetSettings() {
   page.keybinding_nextpage.onchange();
   reply.enable_reply.onchange();
   reply.keybinding_reply.onchange();
+  newest.enable_newest.onchange();
+  newest.keybinding_newest.onchange();
   noala.enable_noala.onchange();
   noala.noala_count.onchange();
   noala.noala_maxcount.onchange();
+  warning.enable_zero.onchange();
+  warning.watchlist.onchange();
   not.enable_not.onchange();
   not.not_freq.onchange();
   not.not_msg.onchange();

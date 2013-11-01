@@ -1,4 +1,4 @@
-﻿var time = -1;
+var time = -1;
 var count = 0;
 var not = 1;
 var not2 = 1;
@@ -65,9 +65,11 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["enabled_scrap"] === undefined) localStorage["enabled_scrap"] = true;
         if (localStorage["enabled_page"] === undefined) localStorage["enabled_page"] = true;
         if (localStorage["enabled_reply"] === undefined) localStorage["enabled_reply"] = true;
+        if (localStorage["enabled_newest"] === undefined) localStorage["enabled_newest"] = true;
         if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = true;
         if (localStorage["enabled_not"] === undefined) localStorage["enabled_not"] = false;
         if (localStorage["enabled_not2"] === undefined) localStorage["enabled_not2"] = false;
+        if (localStorage["enabled_zero"] === undefined) localStorage["enabled_zero"] = true;
         if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
         if (localStorage["not2_freq"] === undefined) localStorage["not2_freq"] = '100';
         if (localStorage["not_msg"] === undefined) localStorage["not_msg"] = '일베 이용 시간이 [시간]을 경과했습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.';
@@ -80,8 +82,10 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["keybinding_reply"] === undefined) localStorage["keybinding_reply"] = 'r';
         if (localStorage["keybinding_prevpage"] === undefined) localStorage["keybinding_prevpage"] = '[';
         if (localStorage["keybinding_nextpage"] === undefined) localStorage["keybinding_nextpage"] = ']';
+        if (localStorage["keybinding_newest"] === undefined) localStorage["keybinding_newest"] = 'z';
         if (localStorage["time"] === undefined) localStorage["time"] = '0';
         if (localStorage["count"] === undefined) localStorage["count"] = '0';
+        if (localStorage["watchlist"] === undefined) localStorage["watchlist"] = '';
         sendResponse(localStorage);
     }
     else {
@@ -94,6 +98,15 @@ chrome.tabs.onRemoved.addListener(onTabRemoved);
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-      if (request.action == "openLink")
-        chrome.tabs.create({url:request.link});
-});
+        if (request.action == "openLink") {
+            chrome.tabs.create({url:request.link});
+        } else if (request.action == "addWatchlist") {
+            if (localStorage["watchlist"] != "") {
+                localStorage["watchlist"] += ',';
+            }
+            localStorage["watchlist"] += request.link;
+        } else if (request.action == "removeWatchlist") {
+            localStorage["watchlist"] = localStorage["watchlist"].replace(',' + request.link, '').replace(request.link, '');
+        }
+    }
+);
