@@ -9,27 +9,55 @@ function movePage(relPos) {
     pageNavigation = pageNavigation[pageNavigation.length - 1]; // select the last one
     var currentPage = parseInt(pageNavigation.getElementsByTagName("strong")[0].innerText);
     var pageLinks = pageNavigation.getElementsByTagName("a");
-    var t = -1;
+    var newPage = currentPage + relPos;
     for(var i=0;i<pageLinks.length;++i){
         if ( pageLinks[i].innerText === '이전' ){ // 첫 페이지 링크 따라가지 않도록 함
-            t = i;
             break;
         }
     }
-    if(t!=-1){
-        var newPage = currentPage + relPos;
-        newPage = Math.max(1, newPage);
-        var newHref = pageLinks[t].href.replace(/page=\d+/, "page=" + newPage);
-        location.href = newHref;
+    if (newPage < 1) {
+        alert("가장 최신 글입니다!");
+    } else {
+        location.href = pageLinks[i].href.replace(/page=\d+/, "page=" + newPage);
     }
 }
 
-function secondsToHms(d) {
-    d = Number(d);
-    var h = Math.floor(d / 3600);
-    var m = Math.floor(d % 3600 / 60);
-    var s = Math.floor(d % 3600 % 60);
-    return ((h > 0 ? h + ":" : "") + (m > 0 ? (h > 0 && m < 10 ? "0" : "") + m + ":" : "0:") + (s < 10 ? "0" : "") + s);
+function moveArticle(relPos, refresh) {
+    var boardList = document.getElementsByClassName("boardList")[0];
+    var articles = boardList.getElementsByTagName("tr");
+    var currentArticle = document.evaluate(".//img[@src='/modules/board/skins/xe_board_hancoma_title/images/common/iconArrowD8.gif']", boardList, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null).snapshotItem(0);
+    if (currentArticle !== null) {
+        for (var i = 1; i < articles.length; i++) {
+            if (articles[i] === currentArticle.parentNode.parentNode) {
+                break;
+            }
+        }
+        if ((i == 1 && relPos == -1) || (i == articles.length - 1 && relPos == 1)) {
+            if (refresh) {
+                location.href = location.href + '?pluginAction=' + (relPos + 2);
+            } else {
+                movePage(relPos);
+            }
+        } else {
+            location.href = articles[i + relPos].getElementsByTagName("a")[0].href;
+        }
+    } else if (!refresh) {
+        if (relPos == 1) {
+            for(var i = 1; i < articles.length; i++){
+                if (articles[i].className !== "notice") {
+                    break;
+                }
+            }
+        } else if (relPos == -1) {
+            var i = articles.length - 1;
+        }
+        location.href = articles[i].getElementsByTagName("a")[0].href;
+    }
+}
+
+var pluginAction = location.href.match(/pluginAction\=(\d+)/);
+if (pluginAction !== null) {
+    moveArticle(parseInt(pluginAction[1]) - 2, false);
 }
 
 // 설정 데이터 가져오기
@@ -199,12 +227,12 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     });
     key(myLocalStorage["keybinding_prevpage"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
-            movePage(-1);
+            moveArticle(-1, true);
         }
     });
     key(myLocalStorage["keybinding_nextpage"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
-            movePage(1);
+            moveArticle(1, true);
         }
     });
     key(myLocalStorage["keybinding_reply"], function () {
