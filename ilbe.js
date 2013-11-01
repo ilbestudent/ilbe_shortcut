@@ -18,7 +18,11 @@ function movePage(relPos) {
     if (newPage < 1) {
         alert("가장 최신 글입니다!");
     } else {
-        location.href = pageLinks[i].href.replace(/page=\d+/, "page=" + newPage);
+        if (relPos != 0) {
+            location.href = pageLinks[i].href.replace(/page=\d+/, "page=" + newPage);
+        } else {
+            location.href = pageLinks[i].href.replace(/page=\d+/, "page=" + 1) + "&pluginAction=3";
+        }
     }
 }
 
@@ -233,6 +237,11 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     key(myLocalStorage["keybinding_nextpage"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
             moveArticle(1, true);
+        }
+    });
+    key(myLocalStorage["keybinding_newest"], function () {
+        if (JSON.parse(myLocalStorage["enabled_newest"])) {
+            movePage(0);
         }
     });
     key(myLocalStorage["keybinding_reply"], function () {

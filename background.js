@@ -65,6 +65,7 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["enabled_scrap"] === undefined) localStorage["enabled_scrap"] = true;
         if (localStorage["enabled_page"] === undefined) localStorage["enabled_page"] = true;
         if (localStorage["enabled_reply"] === undefined) localStorage["enabled_reply"] = true;
+        if (localStorage["enabled_newest"] === undefined) localStorage["enabled_newest"] = true;
         if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = true;
         if (localStorage["enabled_not"] === undefined) localStorage["enabled_not"] = false;
         if (localStorage["enabled_not2"] === undefined) localStorage["enabled_not2"] = false;
@@ -81,6 +82,7 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["keybinding_reply"] === undefined) localStorage["keybinding_reply"] = 'r';
         if (localStorage["keybinding_prevpage"] === undefined) localStorage["keybinding_prevpage"] = '[';
         if (localStorage["keybinding_nextpage"] === undefined) localStorage["keybinding_nextpage"] = ']';
+        if (localStorage["keybinding_newest"] === undefined) localStorage["keybinding_newest"] = 'z';
         if (localStorage["time"] === undefined) localStorage["time"] = '0';
         if (localStorage["count"] === undefined) localStorage["count"] = '0';
         if (localStorage["watchlist"] === undefined) localStorage["watchlist"] = '';
