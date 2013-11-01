@@ -36,7 +36,7 @@ function secondsToHms(d) {
 chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalStorage_) {
     myLocalStorage = myLocalStorage_;
 
-    var link = document.evaluate("//a[contains(@href, 'todayhumor.co.kr')]", document, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    var link = document.evaluate(".//a[contains(@href, 'todayhumor.co.kr')]", document.getElementById("content"), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0; i < link.snapshotLength; i++) {
         var thisLink = link.snapshotItem(i);
         thisLink.setAttribute("class", thisLink.href);
@@ -44,6 +44,32 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             chrome.runtime.sendMessage({action: "openLink", link: thisLink.className});
         });
         thisLink.href = "javascript:void(0)";
+    }
+
+    if (JSON.parse(myLocalStorage["enabled_zero"])) {
+        var zero = document.evaluate(".//img[@src='http://www.ilbe.com/modules/point/icons/default_ilbe/0.gif']", document.getElementById("content"), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (var i = 0; i < zero.snapshotLength; i++) {
+            var zerorow = zero.snapshotItem(i).parentNode.parentNode.parentNode;
+            if(zerorow.className === "replyIndent" || zerorow.className === "userInfo") {
+                zerorow = zerorow.parentNode;
+            }
+            zerorow.setAttribute("style", "background:darkorange");
+        }
+    }
+
+    var watchlist = myLocalStorage["watchlist"].split(',');
+    if (watchlist.length > 0) {
+        var member = document.evaluate(".//div[starts-with(@class, 'member_')]", document.getElementById("content"), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+        for (var i = 0; i < member.snapshotLength; i++) {
+            var thisMember = member.snapshotItem(i);
+            if(watchlist.indexOf(thisMember.className.split('_')[1]) > -1) {
+                thisMember = thisMember.parentNode.parentNode;
+                if(thisMember.className === "replyIndent" || thisMember.className === "userInfo") {
+                    thisMember = thisMember.parentNode.parentNode.parentNode;
+                }
+                thisMember.setAttribute("style", "background:darkorange");
+            }
+        }
     }
 
     // 저격 기능 추가
@@ -62,6 +88,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         }
         if (sniperPos == -1) {
             var image = chrome.extension.getURL("snipe.gif")
+            var image2 = chrome.extension.getURL("add.gif")
             var sniperNode = document.createElement("li");
             sniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var sniperLink = document.createElement("a");
@@ -70,6 +97,10 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var googlesniperLink = document.createElement("a");
             googlesniperLink.innerText = "조준하기(구글)";
+            var addwatchlistNode = document.createElement("li");
+            addwatchlistNode.setAttribute("style", "background-image:url('" + image2 + "')");
+            var addwatchlistLink = document.createElement("a");
+            addwatchlistLink.innerText = "와치리스트에 추가하기";
             // http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberInfo&member_srl=$$$ 
             var memberInfoHref = items[memberInfoPos].getElementsByTagName("a")[0].href; // 멤버 정보 보는 주소
             var memberSrl = memberInfoHref.match(/member_srl\=(\d+)/)[1];
@@ -78,11 +109,25 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
                 sniperLink.target = "_blank";
                 googlesniperLink.href = "http://www.google.co.kr/search?q=site%3Ailbe.com+" + memberSrl;
                 googlesniperLink.target = "_blank";
+                addwatchlistLink.href = "javascript:void(0)";
+                addwatchlistLink.setAttribute("class", memberSrl);
+                if(watchlist.indexOf(memberSrl) > -1) {
+                    addwatchlistLink.addEventListener('click', function(){
+                        chrome.runtime.sendMessage({action: "removeWatchlist", link: addwatchlistLink.className});
+                    });
+                    addwatchlistLink.innerText = "와치리스트에서 제거하기";
+                } else {
+                    addwatchlistLink.addEventListener('click', function(){
+                        chrome.runtime.sendMessage({action: "addWatchlist", link: addwatchlistLink.className});
+                    });
+                }
             }
             sniperNode.appendChild(sniperLink);
             googlesniperNode.appendChild(googlesniperLink);
+            addwatchlistNode.appendChild(addwatchlistLink);
             popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
             popupMenu.getElementsByTagName("ul")[0].appendChild(googlesniperNode);
+            popupMenu.getElementsByTagName("ul")[0].appendChild(addwatchlistNode);
         }
     });
 

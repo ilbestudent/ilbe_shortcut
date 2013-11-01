@@ -13,6 +13,8 @@ var defaultSetting = {
   enabled_noala:true, // 노알라 표시 기능 활성화 
   noala_count:200, // 일베 n개 당 노알라 1개 표시 
   noala_maxcount:10, // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
+  enabled_zero:true,
+  watchlist:"",
   enabled_not:false,
   enabled_not2:false,
   not_freq:60,
@@ -88,6 +90,8 @@ window.addEventListener('load', function() {
   noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
   noala.noala_count.value = localStorage["noala_count"];
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
+  warning.enable_zero.checked = JSON.parse(localStorage["enabled_zero"]);
+  warning.watchlist.value = localStorage["watchlist"];
   not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
   not.not_freq.value = localStorage["not_freq"];
   not.not_msg.value = localStorage["not_msg"];
@@ -160,6 +164,14 @@ window.addEventListener('load', function() {
     localStorage["keybinding_nextpage"] = page.keybinding_nextpage.value;
   };
 
+  warning.enable_zero.onchange = function() {
+    localStorage["enabled_zero"] = warning.enable_zero.checked;
+  };
+
+  warning.watchlist.onchange = function() {
+    localStorage["watchlist"] = warning.watchlist.value;
+  };
+
   not.enable_not.onchange = function() {
     localStorage["enabled_not"] = not.enable_not.checked;
     ghost_not(!not.enable_not.checked);
@@ -204,12 +216,14 @@ function resetSettings() {
   noala.enable_noala.checked = defaultSetting.enabled_noala;
   noala.noala_count.value = defaultSetting.noala_count;
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
-  not.enable_not = defaultSetting.enabled_not;
-  not.not_freq = defaultSetting.not_freq;
-  not.not_msg = defaultSetting.not_msg;
-  not2.enable_not2 = defaultSetting.enabled_not2;
-  not2.not2_freq = defaultSetting.not2_freq;
-  not2.not2_msg = defaultSetting.not2_msg;
+  warning.enable_zero.checked = defaultSetting.enabled_zero;
+  warning.watchlist.value = defaultSetting.watchlist;
+  not.enable_not.checked = defaultSetting.enabled_not;
+  not.not_freq.value = defaultSetting.not_freq;
+  not.not_msg.value = defaultSetting.not_msg;
+  not2.enable_not2.checked = defaultSetting.enabled_not2;
+  not2.not2_freq.value = defaultSetting.not2_freq;
+  not2.not2_msg.value = defaultSetting.not2_msg;
 
   yn.enable_yn.onchange();
   yn.keybinding_yes.onchange();
@@ -224,6 +238,8 @@ function resetSettings() {
   noala.enable_noala.onchange();
   noala.noala_count.onchange();
   noala.noala_maxcount.onchange();
+  warning.enable_zero.onchange();
+  warning.watchlist.onchange();
   not.enable_not.onchange();
   not.not_freq.onchange();
   not.not_msg.onchange();
