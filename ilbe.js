@@ -65,7 +65,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             if(watchlist.indexOf(thisMember.className.split('_')[1]) > -1) {
                 thisMember = thisMember.parentNode.parentNode;
                 if(thisMember.className === "replyIndent" || thisMember.className === "userInfo") {
-                    thisMember = thisMember.parentNode.parentNode.parentNode;
+                    thisMember = thisMember.parentNode;
                 }
                 thisMember.setAttribute("style", "background:darkgray");
             }
