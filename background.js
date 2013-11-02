@@ -82,6 +82,8 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["keybinding_reply"] === undefined) localStorage["keybinding_reply"] = 'r';
         if (localStorage["keybinding_prevpage"] === undefined) localStorage["keybinding_prevpage"] = '[';
         if (localStorage["keybinding_nextpage"] === undefined) localStorage["keybinding_nextpage"] = ']';
+        if (localStorage["keybinding_prevpage"] === undefined) localStorage["keybinding_prevarticle"] = '<';
+        if (localStorage["keybinding_nextpage"] === undefined) localStorage["keybinding_nextarticle"] = '>';
         if (localStorage["keybinding_newest"] === undefined) localStorage["keybinding_newest"] = 'z';
         if (localStorage["time"] === undefined) localStorage["time"] = '0';
         if (localStorage["count"] === undefined) localStorage["count"] = '0';

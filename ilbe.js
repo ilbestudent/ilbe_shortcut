@@ -229,14 +229,24 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             }, 250);
         }
     });
-    key(myLocalStorage["keybinding_prevpage"], function () {
+    key(myLocalStorage["keybinding_prevarticle"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
             moveArticle(-1, true);
         }
     });
-    key(myLocalStorage["keybinding_nextpage"], function () {
+    key(myLocalStorage["keybinding_nextarticle"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
             moveArticle(1, true);
+        }
+    });
+    key(myLocalStorage["keybinding_prevpage"], function () {
+        if (JSON.parse(myLocalStorage["enabled_page"])) {
+            movePage(-1);
+        }
+    });
+    key(myLocalStorage["keybinding_nextpage"], function () {
+        if (JSON.parse(myLocalStorage["enabled_page"])) {
+            movePage(1);
         }
     });
     key(myLocalStorage["keybinding_newest"], function () {

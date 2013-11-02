@@ -8,6 +8,8 @@ var defaultSetting = {
   enabled_page:true, // 페이지 이동 단축키 활성화 
   keybinding_prevpage:"[", // 이전 페이지 단축키 
   keybinding_nextpage:"]", // 다음 페이지 단축키 
+  keybinding_prevarticle:"<",
+  keybinding_nextarticle:">",
   enabled_reply:true, // 댓글창 이동 단축키 활성화 
   keybinding_reply:"r", // 댓글창 이동 단축키 
   enabled_newest:true,
@@ -40,6 +42,8 @@ function ghost_page(isDeactivated) {
   page.style.color = isDeactivated ? 'graytext' : 'black';
   page.keybinding_prevpage.disabled = isDeactivated;
   page.keybinding_nextpage.disabled = isDeactivated;
+  page.keybinding_prevarticle.disabled = isDeactivated;
+  page.keybinding_nextarticle.disabled = isDeactivated;
 }
 
 function ghost_reply(isDeactivated) {
@@ -92,6 +96,8 @@ window.addEventListener('load', function() {
   page.enable_page.checked = JSON.parse(localStorage["enabled_page"]);
   page.keybinding_prevpage.value = localStorage["keybinding_prevpage"];
   page.keybinding_nextpage.value = localStorage["keybinding_nextpage"];
+  page.keybinding_prevarticle.value = localStorage["keybinding_prevarticle"];
+  page.keybinding_nextarticle.value = localStorage["keybinding_nextarticle"];
   reply.enable_reply.checked = JSON.parse(localStorage["enabled_reply"]);
   reply.keybinding_reply.value = localStorage["keybinding_reply"];
   newest.enable_newest.checked = JSON.parse(localStorage["enabled_newest"]);
@@ -183,6 +189,14 @@ window.addEventListener('load', function() {
     localStorage["keybinding_nextpage"] = page.keybinding_nextpage.value;
   };
 
+  page.keybinding_prevarticle.onchange = function() {
+    localStorage["keybinding_prevarticle"] = page.keybinding_prevarticle.value;
+  };
+
+  page.keybinding_nextarticle.onchange = function() {
+    localStorage["keybinding_nextarticle"] = page.keybinding_nextarticle.value;
+  };
+
   warning.enable_zero.onchange = function() {
     localStorage["enabled_zero"] = warning.enable_zero.checked;
   };
@@ -230,6 +244,8 @@ function resetSettings() {
   page.enable_page.checked = defaultSetting.enabled_page;
   page.keybinding_prevpage.value = defaultSetting.keybinding_prevpage;
   page.keybinding_nextpage.value = defaultSetting.keybinding_nextpage;
+  page.keybinding_prevarticle.value = defaultSetting.keybinding_prevarticle;
+  page.keybinding_nextarticle.value = defaultSetting.keybinding_nextarticle;
   reply.enable_reply.checked = defaultSetting.enabled_reply;
   reply.keybinding_reply.value = defaultSetting.keybinding_reply;
   newest.enable_newest.checked = defaultSetting.enabled_newest;
@@ -254,6 +270,8 @@ function resetSettings() {
   page.enable_page.onchange();
   page.keybinding_prevpage.onchange();
   page.keybinding_nextpage.onchange();
+  page.keybinding_prevarticle.onchange();
+  page.keybinding_nextarticle.onchange();
   reply.enable_reply.onchange();
   reply.keybinding_reply.onchange();
   newest.enable_newest.onchange();
