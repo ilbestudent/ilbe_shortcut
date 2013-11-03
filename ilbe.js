@@ -114,17 +114,17 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             if (items[i].innerText === "회원 정보 보기") {
                 memberInfoPos = i;
             }
-            else if (items[i].innerText === "조준하기(일베레이더)") {
+            else if (items[i].innerText === "조준하기(구글)") {
                 sniperPos = i;
             }
         }
         if (sniperPos == -1) {
             var image = chrome.extension.getURL("snipe.gif")
             var image2 = chrome.extension.getURL("add.gif")
-            var sniperNode = document.createElement("li");
-            sniperNode.setAttribute("style", "background-image:url('" + image + "')");
-            var sniperLink = document.createElement("a");
-            sniperLink.innerText = "조준하기(일베레이더)";
+            //var sniperNode = document.createElement("li");
+            //sniperNode.setAttribute("style", "background-image:url('" + image + "')");
+            //var sniperLink = document.createElement("a");
+            //sniperLink.innerText = "조준하기(일베레이더)";
             var googlesniperNode = document.createElement("li");
             googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
             var googlesniperLink = document.createElement("a");
@@ -137,8 +137,8 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             var memberInfoHref = items[memberInfoPos].getElementsByTagName("a")[0].href; // 멤버 정보 보는 주소
             var memberSrl = memberInfoHref.match(/member_srl\=(\d+)/)[1];
             if (memberSrl !== undefined) {
-                sniperLink.href = "http://ilberadar.com/search.php?mid=" + memberSrl;
-                sniperLink.target = "_blank";
+                //sniperLink.href = "http://ilberadar.com/search.php?mid=" + memberSrl;
+                //sniperLink.target = "_blank";
                 googlesniperLink.href = "http://www.google.co.kr/search?q=site%3Ailbe.com+" + memberSrl;
                 googlesniperLink.target = "_blank";
                 addwatchlistLink.href = "javascript:void(0)";
@@ -154,10 +154,10 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
                     });
                 }
             }
-            sniperNode.appendChild(sniperLink);
+            //sniperNode.appendChild(sniperLink);
             googlesniperNode.appendChild(googlesniperLink);
             addwatchlistNode.appendChild(addwatchlistLink);
-            popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
+            //popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
             popupMenu.getElementsByTagName("ul")[0].appendChild(googlesniperNode);
             popupMenu.getElementsByTagName("ul")[0].appendChild(addwatchlistNode);
         }
@@ -229,14 +229,24 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             }, 250);
         }
     });
-    key(myLocalStorage["keybinding_prevpage"], function () {
+    key(myLocalStorage["keybinding_prevarticle"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
             moveArticle(-1, true);
         }
     });
-    key(myLocalStorage["keybinding_nextpage"], function () {
+    key(myLocalStorage["keybinding_nextarticle"], function () {
         if (JSON.parse(myLocalStorage["enabled_page"])) {
             moveArticle(1, true);
+        }
+    });
+    key(myLocalStorage["keybinding_prevpage"], function () {
+        if (JSON.parse(myLocalStorage["enabled_page"])) {
+            movePage(-1);
+        }
+    });
+    key(myLocalStorage["keybinding_nextpage"], function () {
+        if (JSON.parse(myLocalStorage["enabled_page"])) {
+            movePage(1);
         }
     });
     key(myLocalStorage["keybinding_newest"], function () {
