@@ -1,6 +1,6 @@
 {
   "name": "ILBE 휠체어",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "manifest_version": 2,
   "description": "일베 전용 단축키, 노알라 표시 기능, 일베 중독 방지, 분탕 종자 조준 기능, etc",
   "options_page" : "options.html",
