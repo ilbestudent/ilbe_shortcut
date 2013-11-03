@@ -1,4 +1,3 @@
-// 엨읔엨읔 키보드 shortcut 기능 업데이트 위해 넣었음
 //     keymaster.js
 //     (c) 2011-2012 Thomas Fuchs
 //     keymaster.js may be freely distributed under the MIT license.
@@ -68,7 +67,9 @@ if (pluginAction !== null) {
 chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalStorage_) {
     myLocalStorage = myLocalStorage_;
 
-    var link = document.evaluate(".//a[contains(@href, 'todayhumor.co.kr')]", document.getElementById("content"), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    var content = document.getElementById("content");
+
+    var link = document.evaluate(".//a[contains(@href, 'todayhumor.co.kr')]", content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0; i < link.snapshotLength; i++) {
         var thisLink = link.snapshotItem(i);
         thisLink.setAttribute("class", thisLink.href);
@@ -79,7 +80,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     }
 
     if (JSON.parse(myLocalStorage["enabled_zero"])) {
-        var zero = document.evaluate(".//img[@src='http://www.ilbe.com/modules/point/icons/default_ilbe/0.gif']", document.getElementById("content"), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+        var zero = document.evaluate(".//img[@src='http://www.ilbe.com/modules/point/icons/default_ilbe/0.gif']", content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
         for (var i = 0; i < zero.snapshotLength; i++) {
             var zerorow = zero.snapshotItem(i).parentNode.parentNode.parentNode;
             if(zerorow.className === "replyIndent" || zerorow.className === "userInfo") {
@@ -91,7 +92,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
 
     var watchlist = myLocalStorage["watchlist"].split(',');
     if (watchlist.length > 0) {
-        var member = document.evaluate(".//div[starts-with(@class, 'member_')]", document.getElementById("content"), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+        var member = document.evaluate(".//div[starts-with(@class, 'member_')]", content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
         for (var i = 0; i < member.snapshotLength; i++) {
             var thisMember = member.snapshotItem(i);
             if(watchlist.indexOf(thisMember.className.split('_')[1]) > -1) {
