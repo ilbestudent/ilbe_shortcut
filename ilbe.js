@@ -86,7 +86,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             if(zerorow.className === "replyIndent" || zerorow.className === "userInfo") {
                 zerorow = zerorow.parentNode;
             }
-            zerorow.setAttribute("style", "background:darkgray");
+            zerorow.setAttribute("style", "background:#" + myLocalStorage["bgcolor_zerolevel"]);
         }
     }
 
@@ -100,7 +100,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
                 if(thisMember.className === "replyIndent" || thisMember.className === "userInfo") {
                     thisMember = thisMember.parentNode;
                 }
-                thisMember.setAttribute("style", "background:darkgray");
+                thisMember.setAttribute("style", "background:#" + myLocalStorage["bgcolor_zerolevel"]);
             }
         }
     }

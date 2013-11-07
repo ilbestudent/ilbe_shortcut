@@ -70,7 +70,8 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
         if (localStorage["enabled_not"] === undefined) localStorage["enabled_not"] = false;
         if (localStorage["enabled_not2"] === undefined) localStorage["enabled_not2"] = false;
         if (localStorage["enabled_zero"] === undefined) localStorage["enabled_zero"] = true;
-        if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
+		if (localStorage["bgcolor_zerolevel"] ===undefined) localStorage["bgcolor_zerolevel"] = "FFEEEE";
+		if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
         if (localStorage["not2_freq"] === undefined) localStorage["not2_freq"] = '100';
         if (localStorage["not_msg"] === undefined) localStorage["not_msg"] = '일베 이용 시간이 [시간]을 경과했습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.';
         if (localStorage["not2_msg"] === undefined) localStorage["not2_msg"] = '일베 탐색 횟수가 [횟수]번을 초과하였습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.';

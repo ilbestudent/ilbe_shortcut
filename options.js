@@ -18,6 +18,7 @@ var defaultSetting = {
   noala_count:200, 				// 일베 n개 당 노알라 1개 표시 
   noala_maxcount:10, 			// 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
   enabled_zero:true,			// 0렙 강조
+  bgcolor_zerolevel:"FFEEEE",	// 0렙 강조 배경 색상
   watchlist:"",					// 워치 리스트(지정 회원 강조)
   enabled_not:false,			// 일베 중독 방지[시간]
   enabled_not2:false,			// 일베 중독 방지[횟수]
@@ -77,6 +78,7 @@ window.addEventListener('load', function() {
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
   warning.enable_zero.checked = JSON.parse(localStorage["enabled_zero"]);
   warning.watchlist.value = localStorage["watchlist"];
+  warning.bgcolor_zerolevel.value = localStorage["bgcolor_zerolevel"];
   not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
   not.not_freq.value = localStorage["not_freq"];
   not.not_msg.value = localStorage["not_msg"];
@@ -175,6 +177,10 @@ window.addEventListener('load', function() {
     localStorage["watchlist"] = warning.watchlist.value;
   };
 
+  warning.bgcolor_zerolevel.onchange = function(){
+	localStorage["bgcolor_zerolevel"] = warning.bgcolor_zerolevel.value;
+  };
+
   not.enable_not.onchange = function() {
     localStorage["enabled_not"] = not.enable_not.checked;
     ghost_not(!not.enable_not.checked);
@@ -225,6 +231,7 @@ function resetSettings() {
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
   warning.enable_zero.checked = defaultSetting.enabled_zero;
   warning.watchlist.value = defaultSetting.watchlist;
+  warning.bgcolor_zerolevel.value = defaultSetting.bgcolor_zerolevel;
   not.enable_not.checked = defaultSetting.enabled_not;
   not.not_freq.value = defaultSetting.not_freq;
   not.not_msg.value = defaultSetting.not_msg;
@@ -251,6 +258,7 @@ function resetSettings() {
   noala.noala_maxcount.onchange();
   warning.enable_zero.onchange();
   warning.watchlist.onchange();
+  warning.bgcolor_zerolevel.onchange();
   not.enable_not.onchange();
   not.not_freq.onchange();
   not.not_msg.onchange();
