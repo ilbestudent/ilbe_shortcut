@@ -19,7 +19,7 @@ function SecondToString(second) {
 var background = chrome.extension.getBackgroundPage();
 
 document.getElementById('text').innerHTML = '<b>일베 이용 시간 : </b>' + SecondToString(+new Date() - background.time) + '<br><b>일베 탐색 횟수 : </b>' + background.count + '번<br><b>일베 이용 시간(누적) : </b>' + SecondToString(+new Date() - background.time + parseInt(localStorage["time"])) + '<br><b>일베 탐색 횟수(누적) : </b>' + (background.count + parseInt(localStorage["count"])) + '번';
-document.getElementById('reset').addEventListener('click', function() {
+document.getElementById('reset').addEventListener('click', function () {
   background.time = +new Date();
   background.count = 0;
   background.not = 1;
