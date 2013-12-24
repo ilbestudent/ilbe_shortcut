@@ -69,8 +69,14 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
     if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = true;
     if (localStorage["enabled_not"] === undefined) localStorage["enabled_not"] = false;
     if (localStorage["enabled_not2"] === undefined) localStorage["enabled_not2"] = false;
+	
     if (localStorage["enabled_zero"] === undefined) localStorage["enabled_zero"] = true;
     if (localStorage["bgcolor_zerolevel"] === undefined) localStorage["bgcolor_zerolevel"] = "FFEEEE";
+	if (localStorage["watchlist"] === undefined) localStorage["watchlist"] = '';
+	
+	if (localStorage["bgcolor_favorite"] === undefined) localStorage["bgcolor_favorite"] = "CCFFCC";
+	if (localStorage["favoritelist"] === undefined) localStorage["favoritelist"] = '';
+	
     if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
     if (localStorage["not2_freq"] === undefined) localStorage["not2_freq"] = '100';
     if (localStorage["not_msg"] === undefined) localStorage["not_msg"] = '일베 이용 시간이 [시간]을 경과했습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.';
@@ -88,7 +94,7 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
     if (localStorage["keybinding_newest"] === undefined) localStorage["keybinding_newest"] = 'z';
     if (localStorage["time"] === undefined) localStorage["time"] = '0';
     if (localStorage["count"] === undefined) localStorage["count"] = '0';
-    if (localStorage["watchlist"] === undefined) localStorage["watchlist"] = '';
+    
     sendResponse(localStorage);
   }
   else {
@@ -110,6 +116,13 @@ chrome.runtime.onMessage.addListener(
         localStorage["watchlist"] += request.link;
       } else if (request.action == "removeWatchlist") {
         localStorage["watchlist"] = localStorage["watchlist"].replace(',' + request.link, '').replace(request.link, '');
-      }
+      } else if (request.action == "addFavoritelist") {
+        if (localStorage["favoritelist"] != "") {
+          localStorage["favoritelist"] += ',';
+        }
+        localStorage["favoritelist"] += request.link;
+      } else if (request.action == "removeFavoritelist") {
+        localStorage["favoritelist"] = localStorage["favoritelist"].replace(',' + request.link, '').replace(request.link, '');
+      }	  
     }
 );

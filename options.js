@@ -17,9 +17,11 @@ var defaultSetting = {
   enabled_noala: true, 			    // 노알라 표시 기능 활성화 
   noala_count: 200, 				    // 일베 n개 당 노알라 1개 표시 
   noala_maxcount: 10, 			    // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
-  enabled_zero: true,			      // 0렙 강조
-  bgcolor_zerolevel: "FFEEEE",	// 0렙 강조 배경 색상
-  watchlist: "",					      // 워치 리스트(지정 회원 강조)
+  enabled_zero: true,			          // 0렙 강조
+  bgcolor_zerolevel: "FFEEEE",			  // 0렙 강조 배경 색상
+  watchlist: "",					      // 워치 리스트(지정 회원 강조, 부정적)
+  bgcolor_favorite: "CCFFCC",			  // 즐겨찾는 회원 강조 색상(evergreen)
+  favoritelist: "",						  // 즐겨찾는 회원(긍정적)
   enabled_not: false,			      // 일베 중독 방지[시간]
   enabled_not2: false,			    // 일베 중독 방지[횟수]
   not_freq: 60,					        // 사용시간 n분 초과
@@ -76,9 +78,14 @@ window.addEventListener('load', function () {
   noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
   noala.noala_count.value = localStorage["noala_count"];
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
+  
   warning.enable_zero.checked = JSON.parse(localStorage["enabled_zero"]);
   warning.watchlist.value = localStorage["watchlist"];
   warning.bgcolor_zerolevel.value = localStorage["bgcolor_zerolevel"];
+  
+  favorite.favoritelist.value = localStorage["favoritelist"];
+  favorite.bgcolor_favorite.value = localStorage["bgcolor_favorite"];
+  
   not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
   not.not_freq.value = localStorage["not_freq"];
   not.not_msg.value = localStorage["not_msg"];
@@ -169,6 +176,8 @@ window.addEventListener('load', function () {
     localStorage["keybinding_nextarticle"] = page.keybinding_nextarticle.value;
   };
 
+  /////////////////////////////
+  // 0렙 및 지정 회원 경고 기능
   warning.enable_zero.onchange = function () {
     localStorage["enabled_zero"] = warning.enable_zero.checked;
   };
@@ -179,6 +188,16 @@ window.addEventListener('load', function () {
 
   warning.bgcolor_zerolevel.onchange = function () {
     localStorage["bgcolor_zerolevel"] = warning.bgcolor_zerolevel.value;
+  };
+  
+  /////////////////////////////
+  // 즐겨찾는 일게이 
+  favorite.favoritelist.onchange = function() {
+    localStorage["favoritelist"] = favorite.favoritelist.value;
+  };
+  
+  favorite.bgcolor_favorite.onchange = function() {
+    localStorage["bgcolor_favorite"] = favorite.bgcolor_favorite.value;
   };
 
   not.enable_not.onchange = function () {
@@ -229,9 +248,14 @@ function resetSettings() {
   noala.enable_noala.checked = defaultSetting.enabled_noala;
   noala.noala_count.value = defaultSetting.noala_count;
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
+  
   warning.enable_zero.checked = defaultSetting.enabled_zero;
   warning.watchlist.value = defaultSetting.watchlist;
   warning.bgcolor_zerolevel.value = defaultSetting.bgcolor_zerolevel;
+  
+  favorite.favoritelist.value = defaultSetting.favoritelist;
+  favorite.bgcolor_favorite.value = defaultSetting.bgcolor_favorite;
+  
   not.enable_not.checked = defaultSetting.enabled_not;
   not.not_freq.value = defaultSetting.not_freq;
   not.not_msg.value = defaultSetting.not_msg;
@@ -256,9 +280,14 @@ function resetSettings() {
   noala.enable_noala.onchange();
   noala.noala_count.onchange();
   noala.noala_maxcount.onchange();
+  
   warning.enable_zero.onchange();
   warning.watchlist.onchange();
   warning.bgcolor_zerolevel.onchange();
+  
+  favorite.favoritelist.onchange();
+  favorite.bgcolor_favorite.onchange();
+  
   not.enable_not.onchange();
   not.not_freq.onchange();
   not.not_msg.onchange();

@@ -79,6 +79,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     thisLink.href = "javascript:void(0)";
   }
 
+  // 0렙 강조
   if (JSON.parse(myLocalStorage["enabled_zero"])) {
     var zero = document.evaluate(".//img[@src='http://www.ilbe.com/modules/point/icons/default_ilbe/0.gif']", content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0; i < zero.snapshotLength; i++) {
@@ -90,21 +91,36 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     }
   }
 
+  // 즐겨찾는 일게이 및
+  // 지정 회원 경고 (watchlist)
   var watchlist = myLocalStorage["watchlist"].split(',');
-  if (watchlist.length > 0) {
+  var favoritelist = myLocalStorage["favoritelist"].split(',');
+  if (watchlist.length > 0 || favoritelist.length > 0) {
     var member = document.evaluate(".//div[starts-with(@class, 'member_')]", content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0; i < member.snapshotLength; i++) {
       var thisMember = member.snapshotItem(i);
-      if (watchlist.indexOf(thisMember.className.split('_')[1]) > -1) {
-        thisMember = thisMember.parentNode.parentNode;
+	  
+	  var founded = false;
+	  var bgcolor = null;
+	  if (watchlist.indexOf(thisMember.className.split('_')[1]) > -1) {
+        founded = true;
+		bgcolor = myLocalStorage["bgcolor_zerolevel"];
+      }
+	  else if (favoritelist.indexOf(thisMember.className.split('_')[1]) > -1) {
+        founded = true;
+		bgcolor = myLocalStorage["bgcolor_favorite"];
+      }
+	  
+	  if ( founded && bgcolor !== null ) {
+		thisMember = thisMember.parentNode.parentNode;
         if (thisMember.className === "replyIndent" || thisMember.className === "userInfo") {
           thisMember = thisMember.parentNode;
         }
-        thisMember.setAttribute("style", "background:#" + myLocalStorage["bgcolor_zerolevel"]);
-      }
+        thisMember.setAttribute("style", "background:#" + bgcolor);
+	  }
     }
   }
-
+  
   // 저격 기능 추가
   var popupMenu = document.getElementById("popup_menu_area");
   popupMenu.addEventListener('DOMSubtreeModified', function () {
@@ -130,10 +146,19 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
       googlesniperNode.setAttribute("style", "background-image:url('" + image + "')");
       var googlesniperLink = document.createElement("a");
       googlesniperLink.innerText = "조준하기(구글)";
-      var addwatchlistNode = document.createElement("li");
+	  
+	  // 즐겨찾는 일게이
+      var addfavoritelistNode = document.createElement("li");
+      addfavoritelistNode.setAttribute("style", "background-image:url('" + image2 + "')");
+	  var addfavoritelistLink = document.createElement("a");
+      addfavoritelistLink.innerText = "즐겨찾는 일게이 추가";
+	  
+	  // 워치 리스트
+	  var addwatchlistNode = document.createElement("li");
       addwatchlistNode.setAttribute("style", "background-image:url('" + image2 + "')");
       var addwatchlistLink = document.createElement("a");
       addwatchlistLink.innerText = "와치리스트에 추가하기";
+	  
       // http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberInfo&member_srl=$$$ 
       var memberInfoHref = items[memberInfoPos].getElementsByTagName("a")[0].href; // 멤버 정보 보는 주소
       var memberSrl = memberInfoHref.match(/member_srl\=(\d+)/)[1];
@@ -142,6 +167,22 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         //sniperLink.target = "_blank";
         googlesniperLink.href = "http://www.google.co.kr/search?q=site%3Ailbe.com+" + memberSrl;
         googlesniperLink.target = "_blank";
+		
+		// 즐겨찾기 리스트 등록된 경우 
+        addfavoritelistLink.href = "javascript:void(0)";
+        addfavoritelistLink.setAttribute("class", memberSrl);
+        if (favoritelist.indexOf(memberSrl) > -1) {
+          addfavoritelistLink.addEventListener('click', function () {
+            chrome.runtime.sendMessage({ action: "removeFavoritelist", link: addfavoritelistLink.className });
+          });
+          addfavoritelistLink.innerText = "즐겨찾기에서 제거하기";
+        } else {
+          addfavoritelistLink.addEventListener('click', function () {
+            chrome.runtime.sendMessage({ action: "addFavoritelist", link: addfavoritelistLink.className });
+          });
+        }
+
+		// 와치 리스트 등록된 경우 
         addwatchlistLink.href = "javascript:void(0)";
         addwatchlistLink.setAttribute("class", memberSrl);
         if (watchlist.indexOf(memberSrl) > -1) {
@@ -154,12 +195,16 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             chrome.runtime.sendMessage({ action: "addWatchlist", link: addwatchlistLink.className });
           });
         }
+		
+		
       }
       //sniperNode.appendChild(sniperLink);
       googlesniperNode.appendChild(googlesniperLink);
+	  addfavoritelistNode.appendChild(addfavoritelistLink);
       addwatchlistNode.appendChild(addwatchlistLink);
       //popupMenu.getElementsByTagName("ul")[0].appendChild(sniperNode);
       popupMenu.getElementsByTagName("ul")[0].appendChild(googlesniperNode);
+	  popupMenu.getElementsByTagName("ul")[0].appendChild(addfavoritelistNode);
       popupMenu.getElementsByTagName("ul")[0].appendChild(addwatchlistNode);
     }
   });
