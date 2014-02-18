@@ -242,8 +242,20 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     }
   }
 
-  key(myLocalStorage["keybinding_yes"], function () { if (JSON.parse(myLocalStorage["enabled_yn"])) { document.getElementsByTagName("button").item(0).click(); } });
-  key(myLocalStorage["keybinding_no"], function () { if (JSON.parse(myLocalStorage["enabled_yn"])) { document.getElementsByTagName("button").item(1).click(); } });
+  key(myLocalStorage["keybinding_yes"], function () {
+    if (JSON.parse(myLocalStorage["enabled_yn"])) {
+      //document.getElementsByTagName("button").item(0).click(); -- 이런 식으로 해선 안된다. 다른 button이 있을 수 있기 때문
+      var btnVoted = document.getElementsByClassName("btn_voted");
+      btnVoted.item(0).click();
+    }
+  });
+  key(myLocalStorage["keybinding_no"], function () {
+    if (JSON.parse(myLocalStorage["enabled_yn"])) {
+      //document.getElementsByTagName("button").item(1).click();
+      var btnBlamed = document.getElementsByClassName("btn_blamed");
+      btnBlamed.item(0).click();
+    }
+  });
   key(myLocalStorage["keybinding_scrap"], function () {
     if (JSON.parse(myLocalStorage["enabled_scrap"])) {
       document.getElementsByClassName("document_popup_menu").item(0).children.item(0).click();
