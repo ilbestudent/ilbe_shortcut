@@ -121,6 +121,9 @@ chrome.runtime.onMessage.addListener(
       else if (request.action == "removeWatchlist") {
         localStorage["watchlist"] = localStorage["watchlist"].replace(',' + request.link, '').replace(request.link, '');
       }
+      else if (request.action == "updateWatchlist") {
+        localStorage["watchlist"] = request.link;
+      }
       else if (request.action == "addFavoritelist") {
         if (localStorage["favoritelist"] != "") {
           localStorage["favoritelist"] += ',';
@@ -129,6 +132,9 @@ chrome.runtime.onMessage.addListener(
       }
       else if (request.action == "removeFavoritelist") {
         localStorage["favoritelist"] = localStorage["favoritelist"].replace(',' + request.link, '').replace(request.link, '');
+      }
+      else if (request.action == "updateFavoritelist") {
+        localStorage["favoritelist"] = request.link;
       }
       else if (request.action == "update_notified") {
         // 해당 버전에 대해서 업데이트가 한 번 뜨면 다시 뜨지 않도록 하기 위해
