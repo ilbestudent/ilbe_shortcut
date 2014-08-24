@@ -4,7 +4,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <link href="style.css" rel="stylesheet" type="text/css">
     <script src="options.js" charset="utf-8"></script>
-	<script src="thirdparty/jscolor/jscolor.js"></script>
+    <script src="thirdparty/jscolor/jscolor.js"></script>
   </head>
   <body>
     <h1>
@@ -35,8 +35,12 @@
       <label for="keybinding_reply">댓글창 이동 : </label><input type="text" id="keybinding_reply"><br>
     </form>
     <form id="newest">
-      <input type="checkbox" id="enable_newest"><label for="enable_newest"> 최신글 보기 단축기 활성화</label><br>
+      <input type="checkbox" id="enable_newest"><label for="enable_newest"> 최신글 보기 단축키 활성화</label><br>
       <label for="keybinding_newest">최신글 보기 : </label><input type="text" id="keybinding_newest"><br>
+    </form>
+    <form id="login">
+      <input type="checkbox" id="enable_login"><label for="enable_login">로그아웃 단축키 활성화</label><br>
+      <label for="keybinding_login">로그아웃 : </label><input type="text" id="keybinding_login"><br>
     </form>
     <p>단축키 설정할 때 ⇧, shift, option, ⌥, alt, ctrl, control, command, ⌘ 지원된다. 그렇다고 ctrl+w 같은 단축키 대입하는 엑윽엑엑 일게이는 없을꺼라고 믿는다.</p>
     <p>그런데 ctrl+s 같이 브라우저에서 단축키가 이미 설정되어있는 경우는 안된다. 조심해라.</p>
@@ -47,17 +51,21 @@
       <input type="text" id="noala_count" class="number"><label for="noala_count">베마다 표시</label><br>
       <label for="noala_maxcount">최대 노알라 표시 개수 : </label><input type="text" id="noala_maxcount" class="number">
     </form>
-	<h2>즐겨찾는 일게이</h2>
-	<form id="favorite">
-	  <label for="favoritelist">즐겨찾는 일게이 리스트(콤마[,]로 구분) : </label><input type="text" id="favoritelist" class="message"><br>
-	  <label for="bgcolor_favorite">배경 색상 지정 : </label><input class="color" id="bgcolor_favorite"/><br>
-	</form>
+    <h2>잉여력 팝업</h2>
+    <form id="ingyeo">
+      <input type="checkbox" id="enable_ingyeo"><label for="enable_ingyeo">잉여력 팝업 띄우기</label><br>
+    </form>
+    <h2>실시간 알림 전달(브라우저 알림 사용)</h2>
+    <form id="realtime_notify">
+      <input type="checkbox" id="enable_realtime_notify"><label for="enable_realtime_notify">실시간 알림 전달 활성화</label><br>
+      <input type="checkbox" id="enable_realtime_notify_ilbe"><label for="enable_realtime_notify_ilbe">일베 알림</label><br>
+      <input type="checkbox" id="enable_realtime_notify_reply"><label for="enable_realtime_notify_reply">댓글 알림</label><br>
+    </form>
     <h2>0렙 및 지정 회원 경고 기능</h2>
     <form id="warning">
       <input type="checkbox" id="enable_zero"><label for="enable_zero"> 0렙 경고 기능 활성화</label><br>
-      <label for="watchlist">와치리스트(콤마[,]로 구분) : </label><input type="text" id="watchlist" class="message"><br>
       <label for="bgcolor_zerolevel">배경 색상 지정 : </label><input class="color" id="bgcolor_zerolevel"/><br>
-	</form>
+    </form>
     <h2>이용 시간 알림</h2>
     <form id="not">
       <input type="checkbox" id="enable_not">

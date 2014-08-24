@@ -3,6 +3,33 @@ var count = 0;
 var not = 1;
 var not2 = 1;
 
+var notificationLinkInfo = new Object();
+
+chrome.notifications.onClicked.addListener(function(id){
+  if (id.indexOf("link_")==0){
+    chrome.tabs.create({url:id.substring(5)});
+  }
+});
+
+function ShowChromeNotification(title, message){  
+  chrome.notifications.create('', { 
+    type: "basic",
+    title: title,
+    message: message,
+    iconUrl: "icon-48.png"
+  }, function(id){});
+}
+
+function ShowChromeNotificationWithLink(title, message, buttonLink){
+  // Set the ID by using a buttonLink to prevent duplicated notifications
+  chrome.notifications.create('link_'+buttonLink, {
+    type: "basic",
+    title: title,
+    message: message,
+    iconUrl: "icon-48.png",
+  }, function(id){});
+};
+
 function MinuteToString(minute) {
   var hour = Math.floor(minute / 60);
   var minute = minute - (hour * 60);
@@ -20,29 +47,29 @@ function MinuteToString(minute) {
 }
 
 function refreshUsage() {
-  chrome.tabs.query({ 'url': 'http://www.ilbe.com/*' }, function (tabs) {
-    if (tabs.length > 0) {
-      if (time < 0) {
-        time = +new Date();
-      } else if (JSON.parse(localStorage["enabled_not"]) && (+new Date() - time) > not * localStorage["not_freq"] * 60000) {
-        webkitNotifications.createNotification('icon-48.png', '알림', localStorage["not_msg"].replace('[시간]', MinuteToString(not * localStorage["not_freq"]))).show();
-        not++;
+  chrome.tabs.query({url: "http://www.ilbe.com/*" }, function (tabs) {
+      if (tabs.length > 0) {
+        if (time < 0) {
+          time = +new Date();
+        } else if (JSON.parse(localStorage["enabled_not"]) && (+new Date() - time) > not * localStorage["not_freq"] * 60000) {
+          ShowChromeNotification("알림", localStorage["not_msg"].replace('[시간]', MinuteToString(not * localStorage["not_freq"])));
+          not++;
+        }
+        if (JSON.parse(localStorage["enabled_not2"]) && count >= not2 * localStorage["not2_freq"]) {
+            ShowChromeNotification("알림", localStorage["not2_msg"].replace('[횟수]', not2 * localStorage["not2_freq"]));
+          not2++;
+        }
+      } else {
+        if (time > 0) {
+          localStorage["time"] = +new Date() - time + parseInt(localStorage["time"]);
+          localStorage["count"] = count + parseInt(localStorage["count"]);
+        }
+        time = -1;
+        count = 0;
+        not = 1;
+        not2 = 1;
       }
-      if (JSON.parse(localStorage["enabled_not2"]) && count >= not2 * localStorage["not2_freq"]) {
-        webkitNotifications.createNotification('icon-48.png', '알림', localStorage["not2_msg"].replace('[횟수]', not2 * localStorage["not2_freq"])).show();
-        not2++;
-      }
-    } else {
-      if (time > 0) {
-        localStorage["time"] = +new Date() - time + parseInt(localStorage["time"]);
-        localStorage["count"] = count + parseInt(localStorage["count"]);
-      }
-      time = -1;
-      count = 0;
-      not = 1;
-      not2 = 1;
-    }
-  });
+});
 };
 
 function onTabUpdated(tabId, changeInfo, tab) {
@@ -72,10 +99,12 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
 
     if (localStorage["enabled_zero"] === undefined) localStorage["enabled_zero"] = true;
     if (localStorage["bgcolor_zerolevel"] === undefined) localStorage["bgcolor_zerolevel"] = "FFEEEE";
-    if (localStorage["watchlist"] === undefined) localStorage["watchlist"] = '';
 
-    if (localStorage["bgcolor_favorite"] === undefined) localStorage["bgcolor_favorite"] = "CCFFCC";
-    if (localStorage["favoritelist"] === undefined) localStorage["favoritelist"] = '';
+    if (localStorage["enabled_ingyeo"] === undefined) localStorage["enabled_ingyeo"] = true;
+    
+    if (localStorage["enabled_realtime_notify"] === undefined) localStorage["enabled_realtime_notify"] = true;
+    if (localStorage["enabled_realtime_notify_ilbe"] === undefined) localStorage["enabled_realtime_notify_ilbe"] = true;
+    if (localStorage["enabled_realtime_notify_reply"] === undefined) localStorage["enabled_realtime_notify_reply"] = true;
 
     if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
     if (localStorage["not2_freq"] === undefined) localStorage["not2_freq"] = '100';
@@ -92,11 +121,10 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
     if (localStorage["keybinding_prevarticle"] === undefined) localStorage["keybinding_prevarticle"] = ',';
     if (localStorage["keybinding_nextarticle"] === undefined) localStorage["keybinding_nextarticle"] = '.';
     if (localStorage["keybinding_newest"] === undefined) localStorage["keybinding_newest"] = 'z';
+    if (localStorage["keybinding_login"] === undefined) localStorage["keybinding_login"] = 'l';
     if (localStorage["time"] === undefined) localStorage["time"] = '0';
     if (localStorage["count"] === undefined) localStorage["count"] = '0';
 
-    // localStorage["update_notified"] = undefined;
-    
     sendResponse(localStorage);
   }
   else {
@@ -112,34 +140,16 @@ chrome.runtime.onMessage.addListener(
       if (request.action == "openLink") {
         chrome.tabs.create({ url: request.link });
       }
-      else if (request.action == "addWatchlist") {
-        if (localStorage["watchlist"] != "") {
-          localStorage["watchlist"] += ',';
-        }
-        localStorage["watchlist"] += request.link;
-      }
-      else if (request.action == "removeWatchlist") {
-        localStorage["watchlist"] = localStorage["watchlist"].replace(',' + request.link, '').replace(request.link, '');
-      }
-      else if (request.action == "updateWatchlist") {
-        localStorage["watchlist"] = request.link;
-      }
-      else if (request.action == "addFavoritelist") {
-        if (localStorage["favoritelist"] != "") {
-          localStorage["favoritelist"] += ',';
-        }
-        localStorage["favoritelist"] += request.link;
-      }
-      else if (request.action == "removeFavoritelist") {
-        localStorage["favoritelist"] = localStorage["favoritelist"].replace(',' + request.link, '').replace(request.link, '');
-      }
-      else if (request.action == "updateFavoritelist") {
-        localStorage["favoritelist"] = request.link;
-      }
       else if (request.action == "update_notified") {
         // 해당 버전에 대해서 업데이트가 한 번 뜨면 다시 뜨지 않도록 하기 위해
         var manifest = chrome.runtime.getManifest();
         localStorage["update_notified"] = manifest.version;
       }
+      else if (request.action == "notify_reply" ){
+        ShowChromeNotificationWithLink("댓글", request.comment_content, request.comment_link);
+      }
+      else if (request.action == "notify_ilbe" ){
+        ShowChromeNotificationWithLink("일베", request.document_title, "http://www.ilbe.com/" + request.document_srl);
+      }
     }
-);
+    );

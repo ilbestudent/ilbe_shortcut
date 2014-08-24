@@ -14,14 +14,17 @@ var defaultSetting = {
   keybinding_reply: "r", 		    // 댓글창 이동 단축키 
   enabled_newest: true, 			  // 최신글 이동
   keybinding_newest: "z", 		  // 최신글 이동 단축키
+  enabled_login: true,          // 로그인/아웃 관련 단축키 활성화
+  keybinding_login: "l",        // 로그인(현재는 로그아웃)
   enabled_noala: true, 			    // 노알라 표시 기능 활성화 
   noala_count: 200, 				    // 일베 n개 당 노알라 1개 표시 
   noala_maxcount: 10, 			    // 노알라 표시 최대 수(너무 많이 표시되지 않도록) 
+  enabled_ingyeo: true,         // 잉여력 팝업 띄우기
+  enabled_realtime_notify: true,  // 실시간 알림 전달 활성화
+  enabled_realtime_notify_ilbe: true, // 실시간 알림(일베 알림)
+  enabled_realtime_notify_reply: true, // 실시간 알림(댓글 알림)
   enabled_zero: true,			          // 0렙 강조
   bgcolor_zerolevel: "FFEEEE",			  // 0렙 강조 배경 색상
-  watchlist: "",					      // 워치 리스트(지정 회원 강조, 부정적)
-  bgcolor_favorite: "CCFFCC",			  // 즐겨찾는 회원 강조 색상(evergreen)
-  favoritelist: "",						  // 즐겨찾는 회원(긍정적)
   enabled_not: false,			      // 일베 중독 방지[시간]
   enabled_not2: false,			    // 일베 중독 방지[횟수]
   not_freq: 60,					        // 사용시간 n분 초과
@@ -42,7 +45,10 @@ function ghost_scrap(isDeactivated) { ghost(scrap, [scrap.keybinding_scrap], isD
 function ghost_page(isDeactivated) { ghost(page, [page.keybinding_prevpage, page.keybinding_nextpage, page.keybinding_prevarticle, page.keybinding_nextarticle], isDeactivated); }
 function ghost_reply(isDeactivated) { ghost(reply, [reply.keybinding_reply], isDeactivated); }
 function ghost_newest(isDeactivated) { ghost(newest, [newest.keybinding_newest], isDeactivated); }
+function ghost_login(isDeactivated) { ghost(login, [login.keybinding_login], isDeactivated); }
 function ghost_noala(isDeactivated) { ghost(noala, [noala.noala_count, noala.noala_maxcount], isDeactivated); }
+function ghost_ingyeo(isDeactivated) { ghost(ingyeo, [], isDeactivated); }
+function ghost_realtime_notify(isDeactivated) { ghost(realtime_notify, [realtime_notify.enabled_realtime_notify_ilbe, realtime_notify.enabled_realtime_notify_reply], isDeactivated); }
 function ghost_not(isDeactivated) { ghost(not, [not.not_freq, not.not_msg], isDeactivated); }
 function ghost_not2(isDeactivated) { ghost(not2, [not2.not2_freq, not2.not2_msg], isDeactivated); }
 
@@ -75,16 +81,20 @@ window.addEventListener('load', function () {
   reply.keybinding_reply.value = localStorage["keybinding_reply"];
   newest.enable_newest.checked = JSON.parse(localStorage["enabled_newest"]);
   newest.keybinding_newest.value = localStorage["keybinding_newest"];
+  login.enable_login.checked = JSON.parse(localStorage["enabled_login"]);
+  login.keybinding_login.value = localStorage["keybinding_login"];
   noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
   noala.noala_count.value = localStorage["noala_count"];
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
-  
+ 
+  ingyeo.enable_ingyeo.checked = JSON.parse(localStorage["enabled_ingyeo"]);
+
+  realtime_notify.enable_realtime_notify.checked = JSON.parse(localStorage["enabled_realtime_notify"]);
+  realtime_notify.enable_realtime_notify_ilbe.checked = JSON.parse(localStorage["enabled_realtime_notify_ilbe"]);
+  realtime_notify.enable_realtime_notify_reply.checked = JSON.parse(localStorage["enabled_realtime_notify_reply"]);
+
   warning.enable_zero.checked = JSON.parse(localStorage["enabled_zero"]);
-  warning.watchlist.value = localStorage["watchlist"];
   warning.bgcolor_zerolevel.value = localStorage["bgcolor_zerolevel"];
-  
-  favorite.favoritelist.value = localStorage["favoritelist"];
-  favorite.bgcolor_favorite.value = localStorage["bgcolor_favorite"];
   
   not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
   not.not_freq.value = localStorage["not_freq"];
@@ -98,7 +108,10 @@ window.addEventListener('load', function () {
   if (!page.enable_page.checked) { ghost_page(true); }
   if (!reply.enable_reply.checked) { ghost_reply(true); }
   if (!newest.enable_newest.checked) { ghost_newest(true); }
+  if (!login.enable_login.checked) { ghost_login(true); }
   if (!noala.enable_noala.checked) { ghost_noala(true); }
+  if (!ingyeo.enable_ingyeo.checked) { ghost_ingyeo(true); }
+  if (!realtime_notify.enable_realtime_notify.checked) { ghost_realtime_notify(true); }
   if (!not.enable_not.checked) { ghost_not(true); }
   if (!not2.enable_not2.checked) { ghost_not2(true); }
 
@@ -127,6 +140,11 @@ window.addEventListener('load', function () {
     ghost_newest(!newest.enable_newest.checked);
   };
 
+  login.enable_login.onchange = function() {
+    localStorage["enabled_login"] = login.enable_login.checked;
+    ghost_login(!login.enable_login.checked);
+  };
+
   noala.enable_noala.onchange = function () {
     localStorage["enabled_noala"] = noala.enable_noala.checked;
     ghost_noala(!noala.enable_noala.checked);
@@ -139,6 +157,26 @@ window.addEventListener('load', function () {
   noala.noala_maxcount.onchange = function () {
     localStorage["noala_maxcount"] = noala.noala_maxcount.value;
   };
+
+  ingyeo.enable_ingyeo.onchange = function() {
+    localStorage["enabled_ingyeo"] = ingyeo.enable_ingyeo.checked;
+    ghost_ingyeo(!ingyeo.enable_ingyeo.checked);
+  };
+
+  // 실시간 알림 전달
+  realtime_notify.enable_realtime_notify.onchange = function() {
+    localStorage["enabled_realtime_notify"] = realtime_notify.enable_realtime_notify.checked;
+    ghost_realtime_notify(!realtime_notify.enable_realtime_notify.checked);
+  };
+
+  realtime_notify.enable_realtime_notify_ilbe.onchange = function() {
+    localStorage["enabled_realtime_notify_ilbe"] = realtime_notify.enable_realtime_notify_ilbe.checked;
+  };
+  
+  realtime_notify.enable_realtime_notify_reply.onchange = function() {
+    localStorage["enabled_realtime_notify_reply"] = realtime_notify.enable_realtime_notify_reply.checked;
+  };
+  ////////
 
   yn.keybinding_yes.onchange = function () {
     localStorage["keybinding_yes"] = yn.keybinding_yes.value;
@@ -160,6 +198,10 @@ window.addEventListener('load', function () {
     localStorage["keybinding_newest"] = newest.keybinding_newest.value;
   };
 
+  login.keybinding_login.onchange = function(){
+    localStorage["keybinding_login"] = login.keybinding_login.value;
+  };
+
   page.keybinding_prevpage.onchange = function () {
     localStorage["keybinding_prevpage"] = page.keybinding_prevpage.value;
   };
@@ -176,30 +218,14 @@ window.addEventListener('load', function () {
     localStorage["keybinding_nextarticle"] = page.keybinding_nextarticle.value;
   };
 
-  /////////////////////////////
-  // 0렙 및 지정 회원 경고 기능
   warning.enable_zero.onchange = function () {
     localStorage["enabled_zero"] = warning.enable_zero.checked;
-  };
-
-  warning.watchlist.onchange = function () {
-    localStorage["watchlist"] = warning.watchlist.value;
   };
 
   warning.bgcolor_zerolevel.onchange = function () {
     localStorage["bgcolor_zerolevel"] = warning.bgcolor_zerolevel.value;
   };
   
-  /////////////////////////////
-  // 즐겨찾는 일게이 
-  favorite.favoritelist.onchange = function() {
-    localStorage["favoritelist"] = favorite.favoritelist.value;
-  };
-  
-  favorite.bgcolor_favorite.onchange = function() {
-    localStorage["bgcolor_favorite"] = favorite.bgcolor_favorite.value;
-  };
-
   not.enable_not.onchange = function () {
     localStorage["enabled_not"] = not.enable_not.checked;
     ghost_not(!not.enable_not.checked);
@@ -245,16 +271,20 @@ function resetSettings() {
   reply.keybinding_reply.value = defaultSetting.keybinding_reply;
   newest.enable_newest.checked = defaultSetting.enabled_newest;
   newest.keybinding_newest.value = defaultSetting.keybinding_newest;
+  login.enable_login.checked = defaultSetting.enabled_login;
+  login.keybinding_login.value = defaultSetting.keybinding_login;
   noala.enable_noala.checked = defaultSetting.enabled_noala;
   noala.noala_count.value = defaultSetting.noala_count;
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
-  
+ 
+  ingyeo.enable_ingyeo.checked = defaultSetting.enabled_ingyeo;
+
+  realtime_notify.enable_realtime_notify.checked = defaultSetting.enabled_realtime_notify;
+  realtime_notify.enable_realtime_notify_ilbe.checked = defaultSetting.enabled_realtime_notify_ilbe;
+  realtime_notify.enable_realtime_notify_reply.checked = defaultSetting.enabled_realtime_notify_reply;
+
   warning.enable_zero.checked = defaultSetting.enabled_zero;
-  warning.watchlist.value = defaultSetting.watchlist;
   warning.bgcolor_zerolevel.value = defaultSetting.bgcolor_zerolevel;
-  
-  favorite.favoritelist.value = defaultSetting.favoritelist;
-  favorite.bgcolor_favorite.value = defaultSetting.bgcolor_favorite;
   
   not.enable_not.checked = defaultSetting.enabled_not;
   not.not_freq.value = defaultSetting.not_freq;
@@ -277,16 +307,20 @@ function resetSettings() {
   reply.keybinding_reply.onchange();
   newest.enable_newest.onchange();
   newest.keybinding_newest.onchange();
+  login.enable_login.onchange();
+  login.keybinding_login.onchange();
   noala.enable_noala.onchange();
   noala.noala_count.onchange();
   noala.noala_maxcount.onchange();
+ 
+  ingyeo.enable_ingyeo.onchange();
   
+  realtime_notify.enable_realtime_enable_notify.onchange();
+  realtime_notify.enable_realtime_enable_notify_ilbe.onchange();
+  realtime_notify.enable_realtime_enable_notify_reply.onchange();
+
   warning.enable_zero.onchange();
-  warning.watchlist.onchange();
   warning.bgcolor_zerolevel.onchange();
-  
-  favorite.favoritelist.onchange();
-  favorite.bgcolor_favorite.onchange();
   
   not.enable_not.onchange();
   not.not_freq.onchange();
