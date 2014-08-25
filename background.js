@@ -1,33 +1,33 @@
-var time = -1;
+﻿var time = -1;
 var count = 0;
 var not = 1;
 var not2 = 1;
 
 var notificationLinkInfo = new Object();
 
-chrome.notifications.onClicked.addListener(function(id){
-  if (id.indexOf("link_")==0){
-    chrome.tabs.create({url:id.substring(5)});
+chrome.notifications.onClicked.addListener(function (id) {
+  if (id.indexOf("link_") == 0) {
+    chrome.tabs.create({ url: id.substring(5) });
   }
 });
 
-function ShowChromeNotification(title, message){  
-  chrome.notifications.create('', { 
+function ShowChromeNotification(title, message) {
+  chrome.notifications.create('', {
     type: "basic",
     title: title,
     message: message,
     iconUrl: "icon-48.png"
-  }, function(id){});
+  }, function (id) { });
 }
 
-function ShowChromeNotificationWithLink(title, message, buttonLink){
+function ShowChromeNotificationWithLink(title, message, buttonLink) {
   // Set the ID by using a buttonLink to prevent duplicated notifications
-  chrome.notifications.create('link_'+buttonLink, {
+  chrome.notifications.create('link_' + buttonLink, {
     type: "basic",
     title: title,
     message: message,
     iconUrl: "icon-48.png",
-  }, function(id){});
+  }, function (id) { });
 };
 
 function MinuteToString(minute) {
@@ -47,34 +47,36 @@ function MinuteToString(minute) {
 }
 
 function refreshUsage() {
-  chrome.tabs.query({url: "http://www.ilbe.com/*" }, function (tabs) {
-      if (tabs.length > 0) {
-        if (time < 0) {
-          time = +new Date();
-        } else if (JSON.parse(localStorage["enabled_not"]) && (+new Date() - time) > not * localStorage["not_freq"] * 60000) {
-          ShowChromeNotification("알림", localStorage["not_msg"].replace('[시간]', MinuteToString(not * localStorage["not_freq"])));
-          not++;
-        }
-        if (JSON.parse(localStorage["enabled_not2"]) && count >= not2 * localStorage["not2_freq"]) {
-            ShowChromeNotification("알림", localStorage["not2_msg"].replace('[횟수]', not2 * localStorage["not2_freq"]));
-          not2++;
-        }
-      } else {
-        if (time > 0) {
-          localStorage["time"] = +new Date() - time + parseInt(localStorage["time"]);
-          localStorage["count"] = count + parseInt(localStorage["count"]);
-        }
-        time = -1;
-        count = 0;
-        not = 1;
-        not2 = 1;
+  chrome.tabs.query({ url: "http://www.ilbe.com/*" }, function (tabs) {
+    if (tabs.length > 0) {
+      if (time < 0) {
+        time = +new Date();
       }
-});
+      else if (JSON.parse(localStorage["enabled_not"]) && (+new Date() - time) > not * localStorage["not_freq"] * 60000) {
+        ShowChromeNotification("알림", localStorage["not_msg"].replace('[시간]', MinuteToString(not * localStorage["not_freq"])));
+        not++;
+      }
+      if (JSON.parse(localStorage["enabled_not2"]) && count >= not2 * localStorage["not2_freq"]) {
+        ShowChromeNotification("알림", localStorage["not2_msg"].replace('[횟수]', not2 * localStorage["not2_freq"]));
+        not2++;
+      }
+    }
+    else {
+      if (time > 0) {
+        localStorage["time"] = +new Date() - time + parseInt(localStorage["time"]);
+        localStorage["count"] = count + parseInt(localStorage["count"]);
+      }
+      time = -1;
+      count = 0;
+      not = 1;
+      not2 = 1;
+    }
+  });
 };
 
 function onTabUpdated(tabId, changeInfo, tab) {
   if (tab.url.indexOf('ilbe.com') > -1) {
-    chrome.pageAction.show(tabId);
+    chrome.pageAction.show(tabId); // To put icons inside the address bar
     if (changeInfo.status == 'complete') {
       count++;
     }
@@ -88,40 +90,9 @@ function onTabRemoved(tabId, removeInfo) {
 
 chrome.extension.onRequest.addListener(function (request, sender, sendResponse) {
   if (request.method == "getLocalStorage") {
-    if (localStorage["enabled_yn"] === undefined) localStorage["enabled_yn"] = true;
-    if (localStorage["enabled_scrap"] === undefined) localStorage["enabled_scrap"] = true;
-    if (localStorage["enabled_page"] === undefined) localStorage["enabled_page"] = true;
-    if (localStorage["enabled_reply"] === undefined) localStorage["enabled_reply"] = true;
-    if (localStorage["enabled_newest"] === undefined) localStorage["enabled_newest"] = true;
-    if (localStorage["enabled_noala"] === undefined) localStorage["enabled_noala"] = true;
-    if (localStorage["enabled_not"] === undefined) localStorage["enabled_not"] = false;
-    if (localStorage["enabled_not2"] === undefined) localStorage["enabled_not2"] = false;
+    FixUndefinedSetting();
 
-    if (localStorage["enabled_zero"] === undefined) localStorage["enabled_zero"] = true;
-    if (localStorage["bgcolor_zerolevel"] === undefined) localStorage["bgcolor_zerolevel"] = "FFEEEE";
-
-    if (localStorage["enabled_ingyeo"] === undefined) localStorage["enabled_ingyeo"] = true;
-    
-    if (localStorage["enabled_realtime_notify"] === undefined) localStorage["enabled_realtime_notify"] = true;
-    if (localStorage["enabled_realtime_notify_ilbe"] === undefined) localStorage["enabled_realtime_notify_ilbe"] = true;
-    if (localStorage["enabled_realtime_notify_reply"] === undefined) localStorage["enabled_realtime_notify_reply"] = true;
-
-    if (localStorage["not_freq"] === undefined) localStorage["not_freq"] = '60';
-    if (localStorage["not2_freq"] === undefined) localStorage["not2_freq"] = '100';
-    if (localStorage["not_msg"] === undefined) localStorage["not_msg"] = '일베 이용 시간이 [시간]을 경과했습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.';
-    if (localStorage["not2_msg"] === undefined) localStorage["not2_msg"] = '일베 탐색 횟수가 [횟수]번을 초과하였습니다. 과도한 일베 이용은 건강에 해로울 수 있습니다.';
-    if (localStorage["noala_count"] === undefined) localStorage["noala_count"] = '200';
-    if (localStorage["noala_maxcount"] === undefined) localStorage["noala_maxcount"] = '10';
-    if (localStorage["keybinding_yes"] === undefined) localStorage["keybinding_yes"] = 'y';
-    if (localStorage["keybinding_no"] === undefined) localStorage["keybinding_no"] = 'n';
-    if (localStorage["keybinding_scrap"] === undefined) localStorage["keybinding_scrap"] = 's';
-    if (localStorage["keybinding_reply"] === undefined) localStorage["keybinding_reply"] = 'r';
-    if (localStorage["keybinding_prevpage"] === undefined) localStorage["keybinding_prevpage"] = '[';
-    if (localStorage["keybinding_nextpage"] === undefined) localStorage["keybinding_nextpage"] = ']';
-    if (localStorage["keybinding_prevarticle"] === undefined) localStorage["keybinding_prevarticle"] = ',';
-    if (localStorage["keybinding_nextarticle"] === undefined) localStorage["keybinding_nextarticle"] = '.';
-    if (localStorage["keybinding_newest"] === undefined) localStorage["keybinding_newest"] = 'z';
-    if (localStorage["keybinding_login"] === undefined) localStorage["keybinding_login"] = 'l';
+    // 통계 데이터는 별도로 보관하는 것이 좋을 것 같다.
     if (localStorage["time"] === undefined) localStorage["time"] = '0';
     if (localStorage["count"] === undefined) localStorage["count"] = '0';
 
@@ -145,10 +116,10 @@ chrome.runtime.onMessage.addListener(
         var manifest = chrome.runtime.getManifest();
         localStorage["update_notified"] = manifest.version;
       }
-      else if (request.action == "notify_reply" ){
+      else if (request.action == "notify_reply") {
         ShowChromeNotificationWithLink("댓글", request.comment_content, request.comment_link);
       }
-      else if (request.action == "notify_ilbe" ){
+      else if (request.action == "notify_ilbe") {
         ShowChromeNotificationWithLink("일베", request.document_title, "http://www.ilbe.com/" + request.document_srl);
       }
     }

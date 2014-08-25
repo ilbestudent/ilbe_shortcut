@@ -1,4 +1,4 @@
-function movePage(relPos) {
+﻿function movePage(relPos) {
   var pageNavigation = document.getElementsByClassName("pagination a1");
   pageNavigation = pageNavigation[pageNavigation.length - 1]; // select the last one
   var currentPage = parseInt(pageNavigation.getElementsByTagName("strong")[0].innerText);
@@ -10,12 +10,12 @@ function movePage(relPos) {
     }
   }
   if (newPage < 1) {
-		noty( { layout: 'topLeft', type: 'information', text: '가장 최신 글입니다.', timeout:1000 } );
-  } 
+    noty({ layout: 'topLeft', type: 'information', text: '가장 최신 글입니다.', timeout: 1000 });
+  }
   else {
     if (relPos != 0) {
       location.href = pageLinks[i].href.replace(/page=\d+/, "page=" + newPage);
-    } 
+    }
     else {
       location.href = pageLinks[i].href.replace(/page=\d+/, "page=" + 1) + "&pluginAction=3";
     }
@@ -35,15 +35,15 @@ function moveArticle(relPos, refresh) {
     if ((i == 1 && relPos == -1) || (i == articles.length - 1 && relPos == 1)) {
       if (refresh) {
         location.href = location.href + '?pluginAction=' + (relPos + 2);
-      } 
+      }
       else {
         movePage(relPos);
       }
-    } 
+    }
     else {
       location.href = articles[i + relPos].getElementsByTagName("a")[0].href;
     }
-  } 
+  }
   else if (!refresh) {
     if (relPos == 1) {
       for (var i = 1; i < articles.length; i++) {
@@ -51,7 +51,7 @@ function moveArticle(relPos, refresh) {
           break;
         }
       }
-    } 
+    }
     else if (relPos == -1) {
       var i = articles.length - 1;
     }
@@ -64,7 +64,9 @@ if (pluginAction !== null) {
   moveArticle(parseInt(pluginAction[1]) - 2, false);
 }
 
-// 설정 데이터 가져오기
+// 기존 설정 & 통계 정보 가져오기
+
+
 chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalStorage_) {
   myLocalStorage = myLocalStorage_;
 
@@ -72,7 +74,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
   var manifest = chrome.runtime.getManifest();
   var updateNotifyType = 'information';
   var updateMessage = '업데이트 되었습니다.';
-  if (myLocalStorage["update_notified"]===undefined){
+  if (myLocalStorage["update_notified"] === undefined) {
     // Fresh installation
     updateNotifyType = 'success';
     updateMessage = '설치되었습니다.';
@@ -123,7 +125,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
       zerorow.setAttribute("style", "background:#" + myLocalStorage["bgcolor_zerolevel"]);
     }
   }
-  
+
   if (JSON.parse(myLocalStorage["enabled_noala"])) {
     // 노알라 기능
     table_nodes = document.getElementsByTagName("table");
@@ -167,26 +169,26 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
       ingyeoNodes.push(myInfo);
     }
     var divNodes = document.getElementsByTagName("div");
-    for (var i=0;i<divNodes.length;i++){
+    for (var i = 0; i < divNodes.length; i++) {
       var targetNode = divNodes[i];
-      if (targetNode.className.indexOf("member_")==0){
-        if (ingyeoReg.test(targetNode.title)){
+      if (targetNode.className.indexOf("member_") == 0) {
+        if (ingyeoReg.test(targetNode.title)) {
           ingyeoNodes.push(targetNode);
         }
       }
     };
     var spanNodes = document.getElementsByTagName("span");
-    for (var i=0;i<spanNodes.length;i++){
+    for (var i = 0; i < spanNodes.length; i++) {
       var targetNode = spanNodes[i];
-      if (targetNode.className.indexOf("member_")==0){
-        if (ingyeoReg.test(targetNode.title)){
+      if (targetNode.className.indexOf("member_") == 0) {
+        if (ingyeoReg.test(targetNode.title)) {
           ingyeoNodes.push(targetNode);
         }
       }
     };
-    for(var i=0;i<ingyeoNodes.length;i++){
+    for (var i = 0; i < ingyeoNodes.length; i++) {
       $(ingyeoNodes[i]).hover(
-          function(){
+          function () {
             var title = $(this).attr('title');
             $(this).data('tipText', title).removeAttr('title');
             var matchResult = title.match(ingyeoReg);
@@ -194,22 +196,22 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             var point = matchResult[1];
             var percent = matchResult[2];
             var imgTag = "";
-            if(ingyeoLevelReg.test(title)){
+            if (ingyeoLevelReg.test(title)) {
               var level = levelMatchResult[1];
               imgTag = '<img src="http://www.ilbe.com/modules/point/icons/default_ilbe/' + level + '.gif"/>';
             }
-            var tooltip = $('<p class="ilbeshortcut_tooltip"></p>').html('<span style="font-family:Arial;font-size:12px;">'+imgTag + '&nbsp;<span style="font-weight:bold;">'+point+'</span>&nbsp;(' + percent+'%)</span>');
+            var tooltip = $('<p class="ilbeshortcut_tooltip"></p>').html('<span style="font-family:Arial;font-size:12px;">' + imgTag + '&nbsp;<span style="font-weight:bold;">' + point + '</span>&nbsp;(' + percent + '%)</span>');
             tooltip.appendTo('body').fadeIn('fast');
           },
-          function(){
+          function () {
             $(this).attr('title', $(this).data('tipText'));
             $('.ilbeshortcut_tooltip').remove();
           }
           ).mousemove(
-            function(e){
+            function (e) {
               var mouseX = e.pageX + 10;
               var mouseY = e.pageY + 10;
-              $('.ilbeshortcut_tooltip').css({"top":mouseY, "left":mouseX});
+              $('.ilbeshortcut_tooltip').css({ "top": mouseY, "left": mouseX });
             }
             );
     }
@@ -218,15 +220,15 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
   if (JSON.parse(myLocalStorage["enabled_realtime_notify"])) {
     // 알림 포워딩 기능
     var port = chrome.runtime.connect();
-    window.addEventListener("message", function(event){
+    window.addEventListener("message", function (event) {
       if (event.source != window) return;
       if (event.data.type) {
-        if (event.data.type == "FROM_PAGE_ILBE"){
+        if (event.data.type == "FROM_PAGE_ILBE") {
           if (JSON.parse(myLocalStorage["enabled_realtime_notify_ilbe"])) {
             chrome.runtime.sendMessage({ action: "notify_ilbe", document_title: event.data.document_title, document_srl: event.data.document_srl });
           }
         }
-        else if(event.data.type == "FROM_PAGE_REPLY"){
+        else if (event.data.type == "FROM_PAGE_REPLY") {
           if (JSON.parse(myLocalStorage["enabled_realtime_notify_reply"])) {
             chrome.runtime.sendMessage({ action: "notify_reply", comment_content: event.data.comment_content, comment_link: event.data.comment_link });
           }
@@ -234,23 +236,23 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
       }
     }, false);
 
-    var actualCode = '(' + function(){
+    var actualCode = '(' + function () {
       var ilbePattern = new RegExp(/<script type=\"text\/javascript\"> if\(!jQuery\.deny_notify_ilbe\) notice\(\'<a href=\"\/(\d*)\">(.*)<\/a>\', 3\); <\/script>/);
       var commentPattern = new RegExp(/<script type=\"text\/javascript\"> if\(!jQuery\.deny_notify_comment\) notice\(\'<a href=\"(.*)\">(.*)<\/a>\', 4\); <\/script>/);
       var oldMessageHandler = ws.onmessage;
-      var newMessageHandler = function(message){
+      var newMessageHandler = function (message) {
         var scriptMessage = message.data.substring(2);
-        if (ilbePattern.test(scriptMessage)){
+        if (ilbePattern.test(scriptMessage)) {
           var matched = ilbePattern.exec(scriptMessage);
           var document_srl = matched[1];
           var document_title = jQuery("<div/>").html(matched[2]).text();
-          window.postMessage( { type: "FROM_PAGE_ILBE", document_srl: document_srl, document_title: document_title }, "http://www.ilbe.com" );
+          window.postMessage({ type: "FROM_PAGE_ILBE", document_srl: document_srl, document_title: document_title }, "http://www.ilbe.com");
         }
-        else if(commentPattern.test(scriptMessage)){
+        else if (commentPattern.test(scriptMessage)) {
           var matched = commentPattern.exec(scriptMessage);
           var comment_link = jQuery("<div/>").html(matched[1]).text();
           var comment_content = jQuery("<div/>").html(matched[2]).text();
-          window.postMessage( { type: "FROM_PAGE_REPLY", comment_link: comment_link, comment_content: comment_content }, "http://www.ilbe.com" );
+          window.postMessage({ type: "FROM_PAGE_REPLY", comment_link: comment_link, comment_content: comment_content }, "http://www.ilbe.com");
         }
         oldMessageHandler(message);
       }
@@ -340,8 +342,8 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
       return false;
     }
   });
-  key(myLocalStorage["keybinding_login"], function(){
-    if (JSON.parse(myLocalStorage["enabled_login"])){
+  key(myLocalStorage["keybinding_login"], function () {
+    if (JSON.parse(myLocalStorage["enabled_login"])) {
       top.location.href = 'http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberLogout';
     }
   });

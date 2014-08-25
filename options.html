@@ -1,83 +1,84 @@
 ﻿<html>
-  <head>
-    <title>ILBE 휠체어 설정</title>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
-    <link href="style.css" rel="stylesheet" type="text/css">
-    <script src="options.js" charset="utf-8"></script>
-    <script src="thirdparty/jscolor/jscolor.js"></script>
-  </head>
-  <body>
-    <h1>
-      <img src="icon-48.png">
-      ILBE 휠체어
-    </h1>
-    <li>플러그인 공식 홈페이지 : <a href="https://sites.google.com/site/ilbeshortcut/" target="_blank">https://sites.google.com/site/ilbeshortcut/</a></li>
-    <li>Github 페이지 : <a href="https://github.com/ilbestudent/ilbe_shortcut" target="_blank">https://github.com/ilbestudent/ilbe_shortcut</a></p></li>
-    <h2>단축키 설정</h2>
-    <form id="yn">
-      <input type="checkbox" id="enable_yn"><label for="enable_yn"> 일베로/민주화 단축키 활성화</label><br>
-      <label for="keybinding_yes">일베로 : </label><input type="text" id="keybinding_yes"><br>
-      <label for="keybinding_no">민주화 : </label><input type="text" id="keybinding_no"><br>
-    </form>
-    <form id="scrap">
-      <input type="checkbox" id="enable_scrap"><label for="enable_scrap"> 스크랩 단축키 활성화</label><br>
-      <label for="keybinding_scrap">스크랩 : </label><input type="text" id="keybinding_scrap"><br>
-    </form>
-    <form id="page">
-      <input type="checkbox" id="enable_page"><label for="enable_page"> 글/페이지 이동 단축키 활성화</label><br>
-      <label for="keybinding_prevpage">이전 페이지 : </label><input type="text" id="keybinding_prevpage"><br>
-      <label for="keybinding_nextpage">다음 페이지 : </label><input type="text" id="keybinding_nextpage"><br>
-      <label for="keybinding_prevarticle">이전글 : </label><input type="text" id="keybinding_prevarticle"><br>
-      <label for="keybinding_nextarticle">다음글 : </label><input type="text" id="keybinding_nextarticle"><br>
-    </form>
-    <form id="reply">
-      <input type="checkbox" id="enable_reply"><label for="enable_reply"> 댓글창 이동 단축키 활성화</label><br>
-      <label for="keybinding_reply">댓글창 이동 : </label><input type="text" id="keybinding_reply"><br>
-    </form>
-    <form id="newest">
-      <input type="checkbox" id="enable_newest"><label for="enable_newest"> 최신글 보기 단축키 활성화</label><br>
-      <label for="keybinding_newest">최신글 보기 : </label><input type="text" id="keybinding_newest"><br>
-    </form>
-    <form id="login">
-      <input type="checkbox" id="enable_login"><label for="enable_login">로그아웃 단축키 활성화</label><br>
-      <label for="keybinding_login">로그아웃 : </label><input type="text" id="keybinding_login"><br>
-    </form>
-    <p>단축키 설정할 때 ⇧, shift, option, ⌥, alt, ctrl, control, command, ⌘ 지원된다. 그렇다고 ctrl+w 같은 단축키 대입하는 엑윽엑엑 일게이는 없을꺼라고 믿는다.</p>
-    <p>그런데 ctrl+s 같이 브라우저에서 단축키가 이미 설정되어있는 경우는 안된다. 조심해라.</p>
-    <p>특수키: backspace, tab, clear, enter, return, esc, escape, space, up, down, left, right, home, end, pageup, pagedown, del, delete, f1~f19.</p>
-    <h2>노알라 표시 기능</h2>
-    <form id="noala">
-      <input type="checkbox" id="enable_noala"><label for="enable_noala"> 노알라 표시 기능 활성화</label><br>
-      <input type="text" id="noala_count" class="number"><label for="noala_count">베마다 표시</label><br>
-      <label for="noala_maxcount">최대 노알라 표시 개수 : </label><input type="text" id="noala_maxcount" class="number">
-    </form>
-    <h2>잉여력 팝업</h2>
-    <form id="ingyeo">
-      <input type="checkbox" id="enable_ingyeo"><label for="enable_ingyeo">잉여력 팝업 띄우기</label><br>
-    </form>
-    <h2>실시간 알림 전달(브라우저 알림 사용)</h2>
-    <form id="realtime_notify">
-      <input type="checkbox" id="enable_realtime_notify"><label for="enable_realtime_notify">실시간 알림 전달 활성화</label><br>
-      <input type="checkbox" id="enable_realtime_notify_ilbe"><label for="enable_realtime_notify_ilbe">일베 알림</label><br>
-      <input type="checkbox" id="enable_realtime_notify_reply"><label for="enable_realtime_notify_reply">댓글 알림</label><br>
-    </form>
-    <h2>0렙 및 지정 회원 경고 기능</h2>
-    <form id="warning">
-      <input type="checkbox" id="enable_zero"><label for="enable_zero"> 0렙 경고 기능 활성화</label><br>
-      <label for="bgcolor_zerolevel">배경 색상 지정 : </label><input class="color" id="bgcolor_zerolevel"/><br>
-    </form>
-    <h2>이용 시간 알림</h2>
-    <form id="not">
-      <input type="checkbox" id="enable_not">
-      <input type="text" id="not_freq" class="number"><label for="not_freq">분 마다 알림 표시</label><br>
-      <label for="not_msg">알림 메시지 : </label><input type="text" id="not_msg" class="message">
-    </form>
-    <h2>탐색 횟수 알림</h2>
-    <form id="not2">
-      <input type="checkbox" id="enable_not2">
-      <input type="text" id="not2_freq" class="number"><label for="not2_freq">번 마다 알림 표시</label><br>
-      <label for="not2_msg">알림 메시지 : </label><input type="text" id="not2_msg" class="message">
-    </form>
-    <h2><input id="reset" type="button" value="설정 초기화"></h2>
-  </body>
+<head>
+  <title>ILBE 휠체어 설정</title>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <script src="default.js" charset="utf-8"></script>
+  <script src="options.js" charset="utf-8"></script>
+  <script src="thirdparty/jscolor/jscolor.js"></script>
+</head>
+<body>
+  <h1>
+    <img src="icon-48.png">
+    ILBE 휠체어
+  </h1>
+  <li>플러그인 공식 홈페이지 : <a href="https://sites.google.com/site/ilbeshortcut/" target="_blank">https://sites.google.com/site/ilbeshortcut/</a></li>
+  <li>Github 페이지 : <a href="https://github.com/ilbestudent/ilbe_shortcut" target="_blank">https://github.com/ilbestudent/ilbe_shortcut</a></p></li>
+  <h2>단축키 설정</h2>
+  <form id="yn">
+    <input type="checkbox" id="enable_yn"><label for="enable_yn"> 일베로/민주화 단축키 활성화</label><br>
+    <label for="keybinding_yes">일베로 : </label><input type="text" id="keybinding_yes"><br>
+    <label for="keybinding_no">민주화 : </label><input type="text" id="keybinding_no"><br>
+  </form>
+  <form id="scrap">
+    <input type="checkbox" id="enable_scrap"><label for="enable_scrap"> 스크랩 단축키 활성화</label><br>
+    <label for="keybinding_scrap">스크랩 : </label><input type="text" id="keybinding_scrap"><br>
+  </form>
+  <form id="page">
+    <input type="checkbox" id="enable_page"><label for="enable_page"> 글/페이지 이동 단축키 활성화</label><br>
+    <label for="keybinding_prevpage">이전 페이지 : </label><input type="text" id="keybinding_prevpage"><br>
+    <label for="keybinding_nextpage">다음 페이지 : </label><input type="text" id="keybinding_nextpage"><br>
+    <label for="keybinding_prevarticle">이전글 : </label><input type="text" id="keybinding_prevarticle"><br>
+    <label for="keybinding_nextarticle">다음글 : </label><input type="text" id="keybinding_nextarticle"><br>
+  </form>
+  <form id="reply">
+    <input type="checkbox" id="enable_reply"><label for="enable_reply"> 댓글창 이동 단축키 활성화</label><br>
+    <label for="keybinding_reply">댓글창 이동 : </label><input type="text" id="keybinding_reply"><br>
+  </form>
+  <form id="newest">
+    <input type="checkbox" id="enable_newest"><label for="enable_newest"> 최신글 보기 단축키 활성화</label><br>
+    <label for="keybinding_newest">최신글 보기 : </label><input type="text" id="keybinding_newest"><br>
+  </form>
+  <form id="login">
+    <input type="checkbox" id="enable_login"><label for="enable_login"> 로그아웃 단축키 활성화</label><br>
+    <label for="keybinding_login">로그아웃 : </label><input type="text" id="keybinding_login"><br>
+  </form>
+  <p>단축키 설정할 때 ⇧, shift, option, ⌥, alt, ctrl, control, command, ⌘ 지원된다. 그렇다고 ctrl+w 같은 단축키 대입하는 엑윽엑엑 일게이는 없을꺼라고 믿는다.</p>
+  <p>그런데 ctrl+s 같이 브라우저에서 단축키가 이미 설정되어있는 경우는 안된다. 조심해라.</p>
+  <p>특수키: backspace, tab, clear, enter, return, esc, escape, space, up, down, left, right, home, end, pageup, pagedown, del, delete, f1~f19.</p>
+  <h2>노알라 표시 기능</h2>
+  <form id="noala">
+    <input type="checkbox" id="enable_noala"><label for="enable_noala"> 노알라 표시 기능 활성화</label><br>
+    <input type="text" id="noala_count" class="number"><label for="noala_count"> 베마다 표시</label><br>
+    <label for="noala_maxcount">최대 노알라 표시 개수 : </label><input type="text" id="noala_maxcount" class="number">
+  </form>
+  <h2>잉여력 팝업</h2>
+  <form id="ingyeo">
+    <input type="checkbox" id="enable_ingyeo"><label for="enable_ingyeo"> 잉여력 팝업 띄우기</label><br>
+  </form>
+  <h2>실시간 알림 전달(브라우저 알림 사용)</h2>
+  <form id="realtime_notify">
+    <input type="checkbox" id="enable_realtime_notify"><label for="enable_realtime_notify"> 실시간 알림 전달 활성화</label><br>
+    <input type="checkbox" id="enable_realtime_notify_ilbe"><label for="enable_realtime_notify_ilbe"> 일베 알림</label><br>
+    <input type="checkbox" id="enable_realtime_notify_reply"><label for="enable_realtime_notify_reply"> 댓글 알림</label><br>
+  </form>
+  <h2>0렙 및 지정 회원 경고 기능</h2>
+  <form id="warning">
+    <input type="checkbox" id="enable_zero"><label for="enable_zero"> 0렙 경고 기능 활성화</label><br>
+    <label for="bgcolor_zerolevel">배경 색상 지정 : </label><input class="color" id="bgcolor_zerolevel" /><br>
+  </form>
+  <h2>이용 시간 알림</h2>
+  <form id="not">
+    <input type="checkbox" id="enable_not">
+    <input type="text" id="not_freq" class="number"><label for="not_freq"> 분 마다 알림 표시</label><br>
+    <label for="not_msg">알림 메시지 : </label><input type="text" id="not_msg" class="message">
+  </form>
+  <h2>탐색 횟수 알림</h2>
+  <form id="not2">
+    <input type="checkbox" id="enable_not2">
+    <input type="text" id="not2_freq" class="number"><label for="not2_freq"> 번 마다 알림 표시</label><br>
+    <label for="not2_msg">알림 메시지 : </label><input type="text" id="not2_msg" class="message">
+  </form>
+  <h2><input id="reset" type="button" value="설정 초기화"></h2>
+</body>
 </html>

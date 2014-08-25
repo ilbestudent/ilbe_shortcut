@@ -1,4 +1,4 @@
-function SecondToString(second) {
+﻿function SecondToString(second) {
   var hour = Math.floor(second / 3600000);
   var minute = Math.floor((second - (hour * 3600000)) / 60000);
   var second = Math.floor((second - (hour * 3600000) - (minute * 60000)) / 1000);

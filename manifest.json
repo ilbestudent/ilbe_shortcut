@@ -1,34 +1,32 @@
 {
   "name": "ILBE 휠체어",
-  "version": "0.1.23",
+  "version": "0.1.24",
   "manifest_version": 2,
   "description": "일베 전용 단축키, 노알라 표시 기능, 일베 중독 방지, etc",
-  "options_page" : "options.html",
-  "icons" : {
-    "48" : "icon-48.png",
-    "128" : "icon-128.png"
+  "options_page": "options.html",
+  "icons": {
+    "48": "icon-48.png",
+    "128": "icon-128.png"
   },
-  "content_scripts":
-  [
+  "content_scripts": [
     {
-      "matches":["http://www.ilbe.com/*"],
+      "matches": [ "http://www.ilbe.com/*" ],
       "js": [
-	  "thirdparty/jquery-2.1.0.min.js", 
-	  "thirdparty/noty/packaged/jquery.noty.packaged.min.js", 
-	  "thirdparty/keymaster.js", 
-	  "ilbe.js"
-	  ],
+        "thirdparty/jquery-2.1.0.min.js",
+        "thirdparty/noty/packaged/jquery.noty.packaged.min.js",
+        "thirdparty/keymaster.js",
+        "ilbe.js"
+      ],
       "css": [ "ilbe.css" ]
     }
   ],
-  "background":{
-    "scripts": ["background.js"]
+  "background": {
+    "scripts": [ "default.js", "background.js" ]
   },
-  "page_action" :
-  {
-    "default_icon" : "icon-16.png",
-    "default_title" : "ILBE 휠체어",
-    "default_popup" : "popup.html"
+  "page_action": {
+    "default_icon": "icon-16.png",
+    "default_title": "ILBE 휠체어",
+    "default_popup": "popup.html"
   },
   "permissions": [
     "http://www.ilbe.com/",
