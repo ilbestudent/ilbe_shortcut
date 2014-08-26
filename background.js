@@ -106,7 +106,6 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
 chrome.tabs.onUpdated.addListener(onTabUpdated);
 chrome.tabs.onRemoved.addListener(onTabRemoved);
 
-// 이런식의 function은 불가능
 function CheckIlbeIsActive() {
   // A chrome window should be focused and a tab should be activated.
   chrome.windows.getAll({ populate: true }, function (windowInfos) {
@@ -128,13 +127,9 @@ function CheckIlbeIsActive() {
 function CheckWhetherIlbeIsActivated(windowInfos) {
   for (var i = 0; i < windowInfos.length; i++) {
     var windowInfo = windowInfos[i];
-    console.log('==windowinfo==');
-    console.log(windowInfo);
     if (windowInfo.focused == true) {
       for (var j = 0; j < windowInfo.tabs.length; j++) {
         var tabInfo = windowInfo.tabs[j];
-        console.log('==tabinfo==');
-        console.log(tabInfo);
         if (tabInfo.url.indexOf('http://www.ilbe.com') > -1) {
           if (tabInfo.active == true) {
             return true;
