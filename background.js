@@ -106,6 +106,46 @@ chrome.extension.onRequest.addListener(function (request, sender, sendResponse) 
 chrome.tabs.onUpdated.addListener(onTabUpdated);
 chrome.tabs.onRemoved.addListener(onTabRemoved);
 
+// 이런식의 function은 불가능
+function CheckIlbeIsActive() {
+  // A chrome window should be focused and a tab should be activated.
+  chrome.windows.getAll({ populate: true }, function (windowInfos) {
+    for (var windowInfo in windowInfos) {
+      if (windowInfo.focused == true) {
+        for (var tabInfo in windowInfo.tabs) {
+          if (tabInfo.url.indexOf('http://www.ilbe.com') > -1) {
+            if (tabInfo.active == true) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+  });
+  return false;
+}
+
+function CheckWhetherIlbeIsActivated(windowInfos) {
+  for (var i = 0; i < windowInfos.length; i++) {
+    var windowInfo = windowInfos[i];
+    console.log('==windowinfo==');
+    console.log(windowInfo);
+    if (windowInfo.focused == true) {
+      for (var j = 0; j < windowInfo.tabs.length; j++) {
+        var tabInfo = windowInfo.tabs[j];
+        console.log('==tabinfo==');
+        console.log(tabInfo);
+        if (tabInfo.url.indexOf('http://www.ilbe.com') > -1) {
+          if (tabInfo.active == true) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
       if (request.action == "openLink") {
@@ -116,15 +156,31 @@ chrome.runtime.onMessage.addListener(
         var manifest = chrome.runtime.getManifest();
         localStorage["update_notified"] = manifest.version;
       }
-      else if (request.action == "notify_reply") {
-        if (JSON.parse(localStorage["enabled_realtime_notify"]) && JSON.parse(localStorage["enabled_realtime_notify_reply"])) {
-          ShowChromeNotificationWithLink("댓글", request.comment_content, request.comment_link, "icon-128-yellow.png");
-        }
-      }
-      else if (request.action == "notify_ilbe") {
-        if (JSON.parse(localStorage["enabled_realtime_notify"]) && JSON.parse(localStorage["enabled_realtime_notify_ilbe"])) {
-          ShowChromeNotificationWithLink("일베", request.document_title, "http://www.ilbe.com/" + request.document_srl, "icon-128.png");
-        }
+
+      var is_notify_ilbe = (request.action == "notify_ilbe");
+      var is_notify_reply = (request.action == "notify_reply");
+
+      if (is_notify_ilbe || is_notify_reply) {
+        chrome.windows.getAll({ populate: true }, function (windowInfos) {
+          var toShowNotify = true;
+          if (JSON.parse(localStorage["enabled_realtime_notify_when_deactive"])) {
+            if (CheckWhetherIlbeIsActivated(windowInfos)) { // 활성화되어 있을 땐 띄우지 않는다.
+              toShowNotify = false;
+            }
+          }
+          if (toShowNotify) {
+            if (is_notify_ilbe) {
+              if (JSON.parse(localStorage["enabled_realtime_notify"]) && JSON.parse(localStorage["enabled_realtime_notify_ilbe"])) {
+                ShowChromeNotificationWithLink("일베", request.document_title, "http://www.ilbe.com/" + request.document_srl, "icon-128.png");
+              }
+            }
+            else if (is_notify_reply) {
+              if (JSON.parse(localStorage["enabled_realtime_notify"]) && JSON.parse(localStorage["enabled_realtime_notify_reply"])) {
+                ShowChromeNotificationWithLink("댓글", request.comment_content, request.comment_link, "icon-128-yellow.png");
+              }
+            }
+          }
+        });
       }
     }
     );

@@ -13,7 +13,7 @@ function ghost_newest(isDeactivated) { ghost(newest, [newest.keybinding_newest],
 function ghost_login(isDeactivated) { ghost(login, [login.keybinding_login], isDeactivated); }
 function ghost_noala(isDeactivated) { ghost(noala, [noala.noala_count, noala.noala_maxcount], isDeactivated); }
 function ghost_ingyeo(isDeactivated) { ghost(ingyeo, [], isDeactivated); }
-function ghost_realtime_notify(isDeactivated) { ghost(realtime_notify, [realtime_notify.enable_realtime_notify_ilbe, realtime_notify.enable_realtime_notify_reply], isDeactivated); }
+function ghost_realtime_notify(isDeactivated) { ghost(realtime_notify, [realtime_notify.enable_realtime_notify_ilbe, realtime_notify.enable_realtime_notify_reply, realtime_notify.enable_realtime_notify_when_deactive], isDeactivated); }
 function ghost_not(isDeactivated) { ghost(not, [not.not_freq, not.not_msg], isDeactivated); }
 function ghost_not2(isDeactivated) { ghost(not2, [not2.not2_freq, not2.not2_msg], isDeactivated); }
 
@@ -39,16 +39,17 @@ window.addEventListener('load', function () {
   noala.enable_noala.checked = JSON.parse(localStorage["enabled_noala"]);
   noala.noala_count.value = localStorage["noala_count"];
   noala.noala_maxcount.value = localStorage["noala_maxcount"];
- 
+
   ingyeo.enable_ingyeo.checked = JSON.parse(localStorage["enabled_ingyeo"]);
 
   realtime_notify.enable_realtime_notify.checked = JSON.parse(localStorage["enabled_realtime_notify"]);
   realtime_notify.enable_realtime_notify_ilbe.checked = JSON.parse(localStorage["enabled_realtime_notify_ilbe"]);
   realtime_notify.enable_realtime_notify_reply.checked = JSON.parse(localStorage["enabled_realtime_notify_reply"]);
+  realtime_notify.enable_realtime_notify_when_deactive.checked = JSON.parse(localStorage["enabled_realtime_notify_when_deactive"]);
 
   warning.enable_zero.checked = JSON.parse(localStorage["enabled_zero"]);
   warning.bgcolor_zerolevel.value = localStorage["bgcolor_zerolevel"];
-  
+
   not.enable_not.checked = JSON.parse(localStorage["enabled_not"]);
   not.not_freq.value = localStorage["not_freq"];
   not.not_msg.value = localStorage["not_msg"];
@@ -93,7 +94,7 @@ window.addEventListener('load', function () {
     ghost_newest(!newest.enable_newest.checked);
   };
 
-  login.enable_login.onchange = function() {
+  login.enable_login.onchange = function () {
     localStorage["enabled_login"] = login.enable_login.checked;
     ghost_login(!login.enable_login.checked);
   };
@@ -111,23 +112,27 @@ window.addEventListener('load', function () {
     localStorage["noala_maxcount"] = noala.noala_maxcount.value;
   };
 
-  ingyeo.enable_ingyeo.onchange = function() {
+  ingyeo.enable_ingyeo.onchange = function () {
     localStorage["enabled_ingyeo"] = ingyeo.enable_ingyeo.checked;
     ghost_ingyeo(!ingyeo.enable_ingyeo.checked);
   };
 
   // 실시간 알림 전달
-  realtime_notify.enable_realtime_notify.onchange = function() {
+  realtime_notify.enable_realtime_notify.onchange = function () {
     localStorage["enabled_realtime_notify"] = realtime_notify.enable_realtime_notify.checked;
     ghost_realtime_notify(!realtime_notify.enable_realtime_notify.checked);
   };
 
-  realtime_notify.enable_realtime_notify_ilbe.onchange = function() {
+  realtime_notify.enable_realtime_notify_ilbe.onchange = function () {
     localStorage["enabled_realtime_notify_ilbe"] = realtime_notify.enable_realtime_notify_ilbe.checked;
   };
-  
-  realtime_notify.enable_realtime_notify_reply.onchange = function() {
+
+  realtime_notify.enable_realtime_notify_reply.onchange = function () {
     localStorage["enabled_realtime_notify_reply"] = realtime_notify.enable_realtime_notify_reply.checked;
+  };
+
+  realtime_notify.enable_realtime_notify_when_deactive.onchange = function () {
+    localStorage["enabled_realtime_notify_when_deactive"] = realtime_notify.enable_realtime_notify_when_deactive.checked;
   };
   ////////
 
@@ -151,7 +156,7 @@ window.addEventListener('load', function () {
     localStorage["keybinding_newest"] = newest.keybinding_newest.value;
   };
 
-  login.keybinding_login.onchange = function(){
+  login.keybinding_login.onchange = function () {
     localStorage["keybinding_login"] = login.keybinding_login.value;
   };
 
@@ -178,7 +183,7 @@ window.addEventListener('load', function () {
   warning.bgcolor_zerolevel.onchange = function () {
     localStorage["bgcolor_zerolevel"] = warning.bgcolor_zerolevel.value;
   };
-  
+
   not.enable_not.onchange = function () {
     localStorage["enabled_not"] = not.enable_not.checked;
     ghost_not(!not.enable_not.checked);
@@ -229,16 +234,17 @@ function resetSettings() {
   noala.enable_noala.checked = defaultSetting.enabled_noala;
   noala.noala_count.value = defaultSetting.noala_count;
   noala.noala_maxcount.value = defaultSetting.noala_maxcount;
- 
+
   ingyeo.enable_ingyeo.checked = defaultSetting.enabled_ingyeo;
 
   realtime_notify.enable_realtime_notify.checked = defaultSetting.enabled_realtime_notify;
   realtime_notify.enable_realtime_notify_ilbe.checked = defaultSetting.enabled_realtime_notify_ilbe;
   realtime_notify.enable_realtime_notify_reply.checked = defaultSetting.enabled_realtime_notify_reply;
+  realtime_notify.enable_realtime_notify_when_deactive.checked = defaultSetting.enable_realtime_notify_when_deactive;
 
   warning.enable_zero.checked = defaultSetting.enabled_zero;
   warning.bgcolor_zerolevel.value = defaultSetting.bgcolor_zerolevel;
-  
+
   not.enable_not.checked = defaultSetting.enabled_not;
   not.not_freq.value = defaultSetting.not_freq;
   not.not_msg.value = defaultSetting.not_msg;
@@ -265,16 +271,17 @@ function resetSettings() {
   noala.enable_noala.onchange();
   noala.noala_count.onchange();
   noala.noala_maxcount.onchange();
- 
+
   ingyeo.enable_ingyeo.onchange();
-  
+
   realtime_notify.enable_realtime_notify.onchange();
   realtime_notify.enable_realtime_notify_ilbe.onchange();
   realtime_notify.enable_realtime_notify_reply.onchange();
+  realtime_notify.enable_realtime_notify_when_deactive.onchange();
 
   warning.enable_zero.onchange();
   warning.bgcolor_zerolevel.onchange();
-  
+
   not.enable_not.onchange();
   not.not_freq.onchange();
   not.not_msg.onchange();

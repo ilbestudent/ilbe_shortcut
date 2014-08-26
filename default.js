@@ -30,6 +30,7 @@ var defaultSetting = {
   enabled_realtime_notify: true,       // 실시간 알림 전달 활성화
   enabled_realtime_notify_ilbe: true,  // 실시간 알림(일베 알림)
   enabled_realtime_notify_reply: true, // 실시간 알림(댓글 알림)
+  enabled_realtime_notify_when_deactive: true, // 일베 창이 활성화되어 있을 때는 알림을 띄우지 않습니다. (일베 자체 알림과 중복해서 표시되지 않도록)
 
   enabled_zero: true,			            // 0렙 강조
   bgcolor_zerolevel: "FFEEEE",			  // 0렙 강조 배경 색상
