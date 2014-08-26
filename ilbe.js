@@ -339,7 +339,10 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
   });
   key(myLocalStorage["keybinding_login"], function () {
     if (JSON.parse(myLocalStorage["enabled_login"])) {
-      top.location.href = 'http://www.ilbe.com/index.php?mid=ilbe&act=dispMemberLogout';
+      var logoutElements = $('.hLogin a[href*="act=dispMemberLogout"]');
+      if (logoutElements.length > 0) {
+        logoutElements[0].click();
+      }
     }
   });
 });
