@@ -16,17 +16,17 @@ function ShowChromeNotification(title, message) {
     type: "basic",
     title: title,
     message: message,
-    iconUrl: "icon-48.png"
+    iconUrl: "icon-128.png"
   }, function (id) { });
 }
 
-function ShowChromeNotificationWithLink(title, message, buttonLink) {
+function ShowChromeNotificationWithLink(title, message, buttonLink, iconUrl) {
   // Set the ID by using a buttonLink to prevent duplicated notifications
   chrome.notifications.create('link_' + buttonLink, {
     type: "basic",
     title: title,
     message: message,
-    iconUrl: "icon-48.png",
+    iconUrl: iconUrl,
   }, function (id) { });
 };
 
@@ -117,10 +117,14 @@ chrome.runtime.onMessage.addListener(
         localStorage["update_notified"] = manifest.version;
       }
       else if (request.action == "notify_reply") {
-        ShowChromeNotificationWithLink("댓글", request.comment_content, request.comment_link);
+        if (JSON.parse(localStorage["enabled_realtime_notify"]) && JSON.parse(localStorage["enabled_realtime_notify_reply"])) {
+          ShowChromeNotificationWithLink("댓글", request.comment_content, request.comment_link, "icon-128-yellow.png");
+        }
       }
       else if (request.action == "notify_ilbe") {
-        ShowChromeNotificationWithLink("일베", request.document_title, "http://www.ilbe.com/" + request.document_srl);
+        if (JSON.parse(localStorage["enabled_realtime_notify"]) && JSON.parse(localStorage["enabled_realtime_notify_ilbe"])) {
+          ShowChromeNotificationWithLink("일베", request.document_title, "http://www.ilbe.com/" + request.document_srl, "icon-128.png");
+        }
       }
     }
     );

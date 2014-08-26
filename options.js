@@ -13,7 +13,7 @@ function ghost_newest(isDeactivated) { ghost(newest, [newest.keybinding_newest],
 function ghost_login(isDeactivated) { ghost(login, [login.keybinding_login], isDeactivated); }
 function ghost_noala(isDeactivated) { ghost(noala, [noala.noala_count, noala.noala_maxcount], isDeactivated); }
 function ghost_ingyeo(isDeactivated) { ghost(ingyeo, [], isDeactivated); }
-function ghost_realtime_notify(isDeactivated) { ghost(realtime_notify, [realtime_notify.enabled_realtime_notify_ilbe, realtime_notify.enabled_realtime_notify_reply], isDeactivated); }
+function ghost_realtime_notify(isDeactivated) { ghost(realtime_notify, [realtime_notify.enable_realtime_notify_ilbe, realtime_notify.enable_realtime_notify_reply], isDeactivated); }
 function ghost_not(isDeactivated) { ghost(not, [not.not_freq, not.not_msg], isDeactivated); }
 function ghost_not2(isDeactivated) { ghost(not2, [not2.not2_freq, not2.not2_msg], isDeactivated); }
 

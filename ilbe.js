@@ -217,53 +217,48 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
     }
   }
 
-  if (JSON.parse(myLocalStorage["enabled_realtime_notify"])) {
+
     // 알림 포워딩 기능
-    var port = chrome.runtime.connect();
-    window.addEventListener("message", function (event) {
-      if (event.source != window) return;
-      if (event.data.type) {
-        if (event.data.type == "FROM_PAGE_ILBE") {
-          if (JSON.parse(myLocalStorage["enabled_realtime_notify_ilbe"])) {
-            chrome.runtime.sendMessage({ action: "notify_ilbe", document_title: event.data.document_title, document_srl: event.data.document_srl });
-          }
-        }
-        else if (event.data.type == "FROM_PAGE_REPLY") {
-          if (JSON.parse(myLocalStorage["enabled_realtime_notify_reply"])) {
-            chrome.runtime.sendMessage({ action: "notify_reply", comment_content: event.data.comment_content, comment_link: event.data.comment_link });
-          }
-        }
+  var port = chrome.runtime.connect();
+  window.addEventListener("message", function (event) {
+    if (event.source != window) return;
+    if (event.data.type) {
+      if (event.data.type == "FROM_PAGE_ILBE") {
+        chrome.runtime.sendMessage({ action: "notify_ilbe", document_title: event.data.document_title, document_srl: event.data.document_srl });
       }
-    }, false);
-
-    var actualCode = '(' + function () {
-      var ilbePattern = new RegExp(/<script type=\"text\/javascript\"> if\(!jQuery\.deny_notify_ilbe\) notice\(\'<a href=\"\/(\d*)\">(.*)<\/a>\', 3\); <\/script>/);
-      var commentPattern = new RegExp(/<script type=\"text\/javascript\"> if\(!jQuery\.deny_notify_comment\) notice\(\'<a href=\"(.*)\">(.*)<\/a>\', 4\); <\/script>/);
-      var oldMessageHandler = ws.onmessage;
-      var newMessageHandler = function (message) {
-        var scriptMessage = message.data.substring(2);
-        if (ilbePattern.test(scriptMessage)) {
-          var matched = ilbePattern.exec(scriptMessage);
-          var document_srl = matched[1];
-          var document_title = jQuery("<div/>").html(matched[2]).text();
-          window.postMessage({ type: "FROM_PAGE_ILBE", document_srl: document_srl, document_title: document_title }, "http://www.ilbe.com");
-        }
-        else if (commentPattern.test(scriptMessage)) {
-          var matched = commentPattern.exec(scriptMessage);
-          var comment_link = jQuery("<div/>").html(matched[1]).text();
-          var comment_content = jQuery("<div/>").html(matched[2]).text();
-          window.postMessage({ type: "FROM_PAGE_REPLY", comment_link: comment_link, comment_content: comment_content }, "http://www.ilbe.com");
-        }
-        oldMessageHandler(message);
+      else if (event.data.type == "FROM_PAGE_REPLY") {
+        chrome.runtime.sendMessage({ action: "notify_reply", comment_content: event.data.comment_content, comment_link: event.data.comment_link });
       }
-      ws.onmessage = newMessageHandler;
-    } + ')();';
+    }
+  }, false);
 
-    var script = document.createElement("script");
-    script.textContent = actualCode;
-    (document.head || document.documentElement).appendChild(script);
-    script.parentNode.removeChild(script);
-  }
+  var actualCode = '(' + function () {
+    var ilbePattern = new RegExp(/<script type=\"text\/javascript\"> if\(!jQuery\.deny_notify_ilbe\) notice\(\'<a href=\"\/(\d*)\">(.*)<\/a>\', 3\); <\/script>/);
+    var commentPattern = new RegExp(/<script type=\"text\/javascript\"> if\(!jQuery\.deny_notify_comment\) notice\(\'<a href=\"(.*)\">(.*)<\/a>\', 4\); <\/script>/);
+    var oldMessageHandler = ws.onmessage;
+    var newMessageHandler = function (message) {
+      var scriptMessage = message.data.substring(2);
+      if (ilbePattern.test(scriptMessage)) {
+        var matched = ilbePattern.exec(scriptMessage);
+        var document_srl = matched[1];
+        var document_title = jQuery("<div/>").html(matched[2]).text();
+        window.postMessage({ type: "FROM_PAGE_ILBE", document_srl: document_srl, document_title: document_title }, "http://www.ilbe.com");
+      }
+      else if (commentPattern.test(scriptMessage)) {
+        var matched = commentPattern.exec(scriptMessage);
+        var comment_link = jQuery("<div/>").html(matched[1]).text();
+        var comment_content = jQuery("<div/>").html(matched[2]).text();
+        window.postMessage({ type: "FROM_PAGE_REPLY", comment_link: comment_link, comment_content: comment_content }, "http://www.ilbe.com");
+      }
+      oldMessageHandler(message);
+    }
+    ws.onmessage = newMessageHandler;
+  } + ')();';
+
+  var script = document.createElement("script");
+  script.textContent = actualCode;
+  (document.head || document.documentElement).appendChild(script);
+  script.parentNode.removeChild(script);
 
   // 단축키 기능
   key(myLocalStorage["keybinding_yes"], function () {
