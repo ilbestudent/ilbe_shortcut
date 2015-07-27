@@ -7,6 +7,7 @@
 
 function ghost_yn(isDeactivated) { ghost(yn, [yn.keybinding_yes, yn.keybinding_no], isDeactivated); }
 function ghost_scrap(isDeactivated) { ghost(scrap, [scrap.keybinding_scrap], isDeactivated); }
+function ghost_advanced_scrap(isDeactivated) { ghost(advanced_scrap, [advanced_scrap.keybinding_advanced_scrap], isDeactivated); }
 function ghost_page(isDeactivated) { ghost(page, [page.keybinding_prevpage, page.keybinding_nextpage, page.keybinding_prevarticle, page.keybinding_nextarticle], isDeactivated); }
 function ghost_reply(isDeactivated) { ghost(reply, [reply.keybinding_reply], isDeactivated); }
 function ghost_newest(isDeactivated) { ghost(newest, [newest.keybinding_newest], isDeactivated); }
@@ -23,8 +24,13 @@ window.addEventListener('load', function () {
   yn.enable_yn.checked = JSON.parse(localStorage["enabled_yn"]);
   yn.keybinding_yes.value = localStorage["keybinding_yes"];
   yn.keybinding_no.value = localStorage["keybinding_no"];
+
   scrap.enable_scrap.checked = JSON.parse(localStorage["enabled_scrap"]);
   scrap.keybinding_scrap.value = localStorage["keybinding_scrap"];
+
+  advanced_scrap.enable_advanced_scrap.checked = JSON.parse(localStorage["enabled_advanced_scrap"]);
+  advanced_scrap.keybinding_advanced_scrap.value = localStorage["keybinding_advanced_scrap"];
+
   page.enable_page.checked = JSON.parse(localStorage["enabled_page"]);
   page.keybinding_prevpage.value = localStorage["keybinding_prevpage"];
   page.keybinding_nextpage.value = localStorage["keybinding_nextpage"];
@@ -59,6 +65,7 @@ window.addEventListener('load', function () {
 
   if (!yn.enable_yn.checked) { ghost_yn(true); }
   if (!scrap.enable_scrap.checked) { ghost_scrap(true); }
+  if (!advanced_scrap.enable_advanced_scrap.checked) { ghost_advanced_scrap(true); }
   if (!page.enable_page.checked) { ghost_page(true); }
   if (!reply.enable_reply.checked) { ghost_reply(true); }
   if (!newest.enable_newest.checked) { ghost_newest(true); }
@@ -78,6 +85,12 @@ window.addEventListener('load', function () {
     localStorage["enabled_scrap"] = scrap.enable_scrap.checked;
     ghost_scrap(!scrap.enable_scrap.checked);
   };
+
+  advanced_scrap.enable_advanced_scrap.onchange = function () {
+    localStorage["enabled_advanced_scrap"] = advanced_scrap.enable_advanced_scrap.checked;
+    ghost_advanced_scrap(!advanced_scrap.enable_advanced_scrap.checked);
+  };
+
 
   page.enable_page.onchange = function () {
     localStorage["enabled_page"] = page.enable_page.checked;
@@ -146,6 +159,10 @@ window.addEventListener('load', function () {
 
   scrap.keybinding_scrap.onchange = function () {
     localStorage["keybinding_scrap"] = scrap.keybinding_scrap.value;
+  };
+
+  advanced_scrap.keybinding_advanced_scrap.onchange = function () {
+    localStorage["keybinding_advanced_scrap"] = advanced_scrap.keybinding_advanced_scrap.value;
   };
 
   reply.keybinding_reply.onchange = function () {
@@ -218,8 +235,13 @@ function resetSettings() {
   yn.enable_yn.checked = defaultSetting.enabled_yn;
   yn.keybinding_yes.value = defaultSetting.keybinding_yes;
   yn.keybinding_no.value = defaultSetting.keybinding_no;
+
   scrap.enable_scrap.checked = defaultSetting.enabled_scrap;
   scrap.keybinding_scrap.value = defaultSetting.keybinding_scrap;
+
+  advanced_scrap.enable_advanced_scrap.checked = defaultSetting.enabled_advanced_scrap;
+  advanced_scrap.keybinding_advanced_scrap.value = defaultSetting.keybinding_advanced_scrap;
+
   page.enable_page.checked = defaultSetting.enabled_page;
   page.keybinding_prevpage.value = defaultSetting.keybinding_prevpage;
   page.keybinding_nextpage.value = defaultSetting.keybinding_nextpage;
@@ -255,8 +277,13 @@ function resetSettings() {
   yn.enable_yn.onchange();
   yn.keybinding_yes.onchange();
   yn.keybinding_no.onchange();
+
   scrap.enable_scrap.onchange();
   scrap.keybinding_scrap.onchange();
+
+  advanced_scrap.enable_advanced_scrap.onchange();
+  advanced_scrap.keybinding_advanced_scrap.onchange();
+
   page.enable_page.onchange();
   page.keybinding_prevpage.onchange();
   page.keybinding_nextpage.onchange();

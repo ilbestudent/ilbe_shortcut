@@ -304,6 +304,33 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
       }, 250);
     }
   });
+
+  key(myLocalStorage["keybinding_advanced_scrap"], function () {
+    if (JSON.parse(myLocalStorage["enabled_advanced_scrap"])) {
+
+        var title_node = document.evaluate('//*[@id="content"]/div[1]/div[2]/div[3]/div[1]/div[1]/div[1]/div[1]/h1/a/text()', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        if (title_node !== null){
+            var title = title_node.textContent;
+            var current_address = location.href;
+            var content_node= document.evaluate('//*[@class="contentBody"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            
+            // need to add HTML code for a modal dialog
+            var advanced_scrap_dialog = document.createElement("div");
+            body.append(advanced_scrap_dialog);
+            
+
+            //var reply_node = document.evaluate('//*[@class="commentListInner"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+        }
+        else{
+            var n = noty({
+                layout: 'topLeft', type: "warning", text: '스크랩 실패(ㅠ_ㅠ)',
+            });
+
+
+        }
+    }
+  });
+
   key(myLocalStorage["keybinding_prevarticle"], function () {
     if (JSON.parse(myLocalStorage["enabled_page"])) {
       moveArticle(-1, true);

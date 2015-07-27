@@ -15,6 +15,7 @@
         "thirdparty/jquery-2.1.0.min.js",
         "thirdparty/noty/packaged/jquery.noty.packaged.min.js",
         "thirdparty/keymaster.js",
+        "thirdparty/jquery.simplemodal.1.4.4.min.js",
         "ilbe.js"
       ],
       "css": [ "ilbe.css" ]
