@@ -116,7 +116,8 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
 
   // 0렙 강조
   if (JSON.parse(myLocalStorage["enabled_zero"])) {
-    var zero = document.evaluate(".//img[@src='http://www.ilbe.com/modules/point/icons/default_ilbe/0.gif']", content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
+    var zero_pattern = ".//img[@src='"+location.protocol+"//www.ilbe.com/modules/point/icons/default_ilbe/0.gif']";
+    var zero = document.evaluate(zero_pattern, content, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
     for (var i = 0; i < zero.snapshotLength; i++) {
       var zerorow = zero.snapshotItem(i).parentNode.parentNode.parentNode;
       if (zerorow.className === "replyIndent" || zerorow.className === "userInfo") {
@@ -198,7 +199,7 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             var imgTag = "";
             if (ingyeoLevelReg.test(title)) {
               var level = levelMatchResult[1];
-              imgTag = '<img src="http://www.ilbe.com/modules/point/icons/default_ilbe/' + level + '.gif"/>';
+              imgTag = '<img src="'+location.protocol+'//www.ilbe.com/modules/point/icons/default_ilbe/' + level + '.gif"/>';
             }
             var tooltip = $('<p class="ilbeshortcut_tooltip"></p>').html('<span style="font-family:Arial;font-size:12px;">' + imgTag + '&nbsp;<span style="font-weight:bold;">' + point + '</span>&nbsp;(' + percent + '%)</span>');
             tooltip.appendTo('body').fadeIn('fast');
@@ -242,13 +243,13 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
         var matched = ilbePattern.exec(scriptMessage);
         var document_srl = matched[1];
         var document_title = jQuery("<div/>").html(matched[2]).text();
-        window.postMessage({ type: "FROM_PAGE_ILBE", document_srl: document_srl, document_title: document_title }, "http://www.ilbe.com");
+        window.postMessage({ type: "FROM_PAGE_ILBE", document_srl: document_srl, document_title: document_title }, location.protocol+"//www.ilbe.com");
       }
       else if (commentPattern.test(scriptMessage)) {
         var matched = commentPattern.exec(scriptMessage);
         var comment_link = jQuery("<div/>").html(matched[1]).text();
         var comment_content = jQuery("<div/>").html(matched[2]).text();
-        window.postMessage({ type: "FROM_PAGE_REPLY", comment_link: comment_link, comment_content: comment_content }, "http://www.ilbe.com");
+        window.postMessage({ type: "FROM_PAGE_REPLY", comment_link: comment_link, comment_content: comment_content }, location.protocol+"//www.ilbe.com");
       }
       oldMessageHandler(message);
     }
@@ -313,11 +314,11 @@ chrome.extension.sendRequest({ method: "getLocalStorage" }, function (myLocalSto
             var title = title_node.textContent;
             var current_address = location.href;
             var content_node= document.evaluate('//*[@class="contentBody"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-            
+
             // need to add HTML code for a modal dialog
             var advanced_scrap_dialog = document.createElement("div");
             body.append(advanced_scrap_dialog);
-            
+
 
             //var reply_node = document.evaluate('//*[@class="commentListInner"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
         }
